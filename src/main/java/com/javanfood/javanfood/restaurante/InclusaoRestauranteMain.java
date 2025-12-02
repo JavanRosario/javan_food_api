@@ -1,29 +1,26 @@
-package com.javanfood.javanfood.jpa;
+package com.javanfood.javanfood.restaurante;
 
 import com.javanfood.javanfood.JavanfoodApplication;
 import com.javanfood.javanfood.domain.model.Cozinha;
+import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.infraistructure.repository.CozinhaRepositoryJpa;
+import com.javanfood.javanfood.infraistructure.repository.RestauranteRepositoryJpa;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-import java.util.List;
-
-public class InclusaoCozinhaMain {
+public class InclusaoRestauranteMain {
     public static void main(String[] args) {
         ApplicationContext app = new SpringApplicationBuilder(JavanfoodApplication.class).web(WebApplicationType.NONE)
                 .run(args);
 
-        CozinhaRepositoryJpa cadastroCozinha = app.getBean(CozinhaRepositoryJpa.class);
+        RestauranteRepositoryJpa bean = app.getBean(RestauranteRepositoryJpa.class);
 
-        Cozinha cozinha1 = new Cozinha();
-        cozinha1.setNome("testando");
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome("TESTANTO");
 
-        Cozinha cozinha2 = new Cozinha();
-        cozinha2.setNome("japonesa");
 
-        Cozinha adicionar = cadastroCozinha.adicionar(cozinha1);
-        Cozinha adicionar1 = cadastroCozinha.adicionar(cozinha2);
+        Restaurante adicionar = bean.adicionar(restaurante);
 
 
         System.out.println(adicionar.getId() + adicionar.getNome());

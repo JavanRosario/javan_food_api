@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.jpa;
+package com.javanfood.javanfood.cozinha;
 
 import com.javanfood.javanfood.JavanfoodApplication;
 import com.javanfood.javanfood.domain.model.Cozinha;
@@ -7,7 +7,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-public class UpdateCozinhaMain {
+public class DeleteCozinhaMain {
     public static void main(String[] args) {
         ApplicationContext app = new SpringApplicationBuilder(JavanfoodApplication.class).web(WebApplicationType.NONE)
                 .run(args);
@@ -16,8 +16,8 @@ public class UpdateCozinhaMain {
 
         Cozinha cozinha = new Cozinha();
         cozinha.setId(1L);
-        cozinha.setNome("updating");
 
-        cozinhaRepositoryJpa.adicionar(cozinha);
+
+        cozinhaRepositoryJpa.delete(cozinha);
     }
 }

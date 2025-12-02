@@ -10,13 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+ @Component
 public class CozinhaRepositoryJpa implements CozinhaRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public List<Cozinha> listar() {
         TypedQuery<Cozinha> query = entityManager.createQuery("from Cozinha", Cozinha.class);
         return query.getResultList();
