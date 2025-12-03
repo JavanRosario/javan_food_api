@@ -1,22 +1,22 @@
-package com.javanfood.javanfood.formapagamento;
+package com.javanfood.javanfood.tests.cozinha;
 
 import com.javanfood.javanfood.JavanfoodApplication;
-import com.javanfood.javanfood.domain.model.FormaPagamento;
-import com.javanfood.javanfood.infraistructure.repository.PagamentoRepositoryJpa;
+import com.javanfood.javanfood.domain.model.Cozinha;
+import com.javanfood.javanfood.infraistructure.repository.CozinhaRepositoryJpa;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-public class BuscaPagamentoMain {
+public class BuscaCozinhaMain {
 	public static void main(String[] args) {
 		ApplicationContext app = new SpringApplicationBuilder(JavanfoodApplication.class).web(WebApplicationType.NONE)
 				.run(args);
 
-		PagamentoRepositoryJpa repositoryJpa = app.getBean(PagamentoRepositoryJpa.class);
+		CozinhaRepositoryJpa cadastroCozinha = app.getBean(CozinhaRepositoryJpa.class);
 
-		FormaPagamento formaPagamento = repositoryJpa.findById(1L);
+		Cozinha cozinha = cadastroCozinha.findById(1L);
 
         System.out.println("====================================");
-        System.out.println(formaPagamento.getDescricao());
+        System.out.println(cozinha.getNome());
 	}
 }
