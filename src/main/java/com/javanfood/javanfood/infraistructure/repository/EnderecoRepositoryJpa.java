@@ -19,7 +19,7 @@ public class EnderecoRepositoryJpa implements EnderecoRespository {
     @Override
     @Transactional
     public List<Endereco> listar() {
-        TypedQuery<Endereco> query = entityManager.createQuery("from endereco", Endereco.class);
+        TypedQuery<Endereco> query = entityManager.createQuery("from Endereco", Endereco.class);
         return query.getResultList();
     }
 
