@@ -1,7 +1,6 @@
 package com.javanfood.javanfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,10 +17,10 @@ public class Cozinha {
 
 
 //    @JsonIgnore
-    @JsonProperty("Título")
+//    @JsonProperty("Título")
     @Column(nullable = false)
 	private String nome;
-	
+
 
 
 }
