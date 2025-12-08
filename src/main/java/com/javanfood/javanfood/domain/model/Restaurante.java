@@ -22,11 +22,11 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
     @ManyToOne
-    @JoinColumn(name = "cozinha_id",nullable = false)
+    @JoinColumn(name = "cozinha_id")
     private Cozinha cozinha;
 
     @ManyToOne
-    @JoinColumn(name = "pagamento_id",nullable = false)
+    @JoinColumn(name = "pagamento_id")
     private FormaPagamento formaPagamento;
 
 

@@ -4,7 +4,9 @@ package com.javanfood.javanfood.api.controlers;
 import com.javanfood.javanfood.api.model.CozinhaXml;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.repository.CozinhaRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +47,46 @@ public class CozinhaApi {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-       return cozinhaRepository.adicionar(cozinha);
+        return cozinhaRepository.adicionar(cozinha);
     }
+
+    @PutMapping("/{cozinha_id}")
+    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinha_id, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaAtual = cozinhaRepository.findById(cozinha_id);
+
+        if (cozinhaAtual != null) {
+//        cozinhaAtual.setNome(cozinha.getNome());
+            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+
+            cozinhaAtual = cozinhaRepository.adicionar(cozinhaAtual);
+            return ResponseEntity.ok(cozinhaAtual);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{cozinha_id}")
+    public ResponseEntity<Cozinha> delete(@PathVariable Long cozinha_id) {
+
+        try {
+            Cozinha cozinhaAtual = cozinhaRepository.findById(cozinha_id);
+
+
+            if (cozinhaAtual != null) {
+
+                cozinhaRepository.delete(cozinhaAtual);
+                return ResponseEntity.noContent().build();
+            }
+
+
+            return ResponseEntity.notFound().build();
+
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+    }
+
 
     //    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 //    public List<Cozinha> listar2() {
