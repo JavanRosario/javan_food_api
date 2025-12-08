@@ -4,7 +4,7 @@ package com.javanfood.javanfood.api.controler;
 import com.javanfood.javanfood.api.model.CozinhaXml;
 import com.javanfood.javanfood.api.service.CadastroCozinhaService;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
+import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaApi {
+public class CozinhaControler {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;

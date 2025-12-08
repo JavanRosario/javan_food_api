@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.domain.repository;
+package com.javanfood.javanfood.api.repository;
 
 import com.javanfood.javanfood.domain.model.Endereco;
 import com.javanfood.javanfood.domain.model.Permisao;

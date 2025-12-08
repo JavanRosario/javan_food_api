@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
 import com.javanfood.javanfood.domain.model.FormaPagamento;
-import com.javanfood.javanfood.domain.repository.PagamentoRepository;
+import com.javanfood.javanfood.api.repository.PagamentoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

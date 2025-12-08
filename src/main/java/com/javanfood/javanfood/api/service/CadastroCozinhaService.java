@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.api.service;
 
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
+import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

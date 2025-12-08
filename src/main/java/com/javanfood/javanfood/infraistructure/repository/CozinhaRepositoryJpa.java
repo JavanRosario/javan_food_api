@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
+import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

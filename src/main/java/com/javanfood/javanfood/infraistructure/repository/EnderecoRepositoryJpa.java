@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
 import com.javanfood.javanfood.domain.model.Endereco;
-import com.javanfood.javanfood.domain.repository.EnderecoRespository;
+import com.javanfood.javanfood.api.repository.EnderecoRespository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
