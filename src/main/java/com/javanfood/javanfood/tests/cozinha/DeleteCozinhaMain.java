@@ -18,6 +18,6 @@ public class DeleteCozinhaMain {
         cozinha.setId(1L);
 
 
-        cozinhaRepositoryJpa.delete(cozinha);
+        cozinhaRepositoryJpa.delete(cozinha.getId());
     }
 }
