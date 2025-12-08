@@ -3,6 +3,8 @@ package com.javanfood.javanfood.api.controler;
 
 import com.javanfood.javanfood.api.model.CozinhaXml;
 import com.javanfood.javanfood.api.service.CadastroCozinhaService;
+import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
+import com.javanfood.javanfood.domain.exeption.EntidadeNãoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
@@ -59,7 +61,6 @@ public class CozinhaControler {
         Cozinha cozinhaAtual = cozinhaRepository.findById(cozinha_id);
 
         if (cozinhaAtual != null) {
-//        cozinhaAtual.setNome(cozinha.getNome());
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
             cozinhaAtual = cozinhaRepository.adicionar(cozinhaAtual);
@@ -73,19 +74,13 @@ public class CozinhaControler {
     public ResponseEntity<Cozinha> delete(@PathVariable Long cozinha_id) {
 
         try {
-            Cozinha cozinhaAtual = cozinhaRepository.findById(cozinha_id);
 
+            cadastroCozinhaService.excluir(cozinha_id);
+            return ResponseEntity.noContent().build();
 
-            if (cozinhaAtual != null) {
-
-                cozinhaRepository.delete(cozinhaAtual);
-                return ResponseEntity.noContent().build();
-            }
-
-
+        } catch (EntidadeNãoEncontradaExeption e) {
             return ResponseEntity.notFound().build();
-
-        } catch (DataIntegrityViolationException e) {
+        } catch (EntidadeEmUsoExeption e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
