@@ -2,14 +2,13 @@ package com.javanfood.javanfood.api.controler;
 
 
 import com.javanfood.javanfood.api.model.CozinhaXml;
+import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import com.javanfood.javanfood.api.service.CadastroCozinhaService;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNãoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.api.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +62,7 @@ public class CozinhaControler {
         if (cozinhaAtual != null) {
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-            cozinhaAtual = cozinhaRepository.adicionar(cozinhaAtual);
+            cozinhaAtual = cadastroCozinhaService.salvar(cozinhaAtual);
             return ResponseEntity.ok(cozinhaAtual);
         }
 
@@ -78,7 +77,7 @@ public class CozinhaControler {
             cadastroCozinhaService.excluir(cozinha_id);
             return ResponseEntity.noContent().build();
 
-        } catch (EntidadeNãoEncontradaExeption e) {
+        } catch (EntidadeNaoEncontradaExeption e) {
             return ResponseEntity.notFound().build();
         } catch (EntidadeEmUsoExeption e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -87,28 +86,4 @@ public class CozinhaControler {
     }
 
 
-    //    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-//    public List<Cozinha> listar2() {
-//        System.out.println("LISTAR 2");
-//        return cozinhaRepository.listar();
-//    }
-
-
-    //    @ResponseStatus(HttpStatus.CREATED)
-//    @GetMapping("/{cozinhaId}")
-//    public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-//        Cozinha cozinha = cozinhaRepository.findById(cozinhaId);
-//
-////        return ResponseEntity.status(HttpStatus.OK).build();
-//
-////        return ResponseEntity.ok(cozinha);
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(HttpHeaders.LOCATION, "http://localhost:8080/cozinhas");
-//
-//        return ResponseEntity
-//                .status(HttpStatus.FOUND)
-//                .headers(httpHeaders)
-//                .build();
-//    }
 }
