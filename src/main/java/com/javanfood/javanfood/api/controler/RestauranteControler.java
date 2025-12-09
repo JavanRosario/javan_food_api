@@ -2,13 +2,13 @@ package com.javanfood.javanfood.api.controler;
 
 
 import com.javanfood.javanfood.api.repository.RestauranteRepository;
+import com.javanfood.javanfood.api.service.CadastroRestauranteService;
+import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +18,9 @@ public class RestauranteControler {
 
     @Autowired
     RestauranteRepository restauranteRepository;
+
+    @Autowired
+    CadastroRestauranteService cadastroRestauranteService;
 
     @GetMapping
     public List<Restaurante> listar() {
@@ -33,5 +36,17 @@ public class RestauranteControler {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
+
+        try {
+            restaurante = cadastroRestauranteService.salvar(restaurante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+        } catch (EntidadeNaoEncontradaExeption e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }
