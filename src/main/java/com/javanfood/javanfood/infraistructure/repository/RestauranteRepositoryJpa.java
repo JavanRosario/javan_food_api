@@ -16,14 +16,12 @@ public class RestauranteRepositoryJpa implements RestauranteRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Restaurante> listar() {
         TypedQuery<Restaurante> query = entityManager.createQuery("from Restaurante", Restaurante.class);
         return query.getResultList();
     }
 
     @Override
-    @Transactional
     public Restaurante findById(Long id) {
         return entityManager.find(Restaurante.class, id);
     }
