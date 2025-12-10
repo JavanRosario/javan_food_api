@@ -8,7 +8,6 @@ import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -74,8 +73,6 @@ public class RestauranteControler {
         } catch (EntidadeNaoEncontradaExeption e) {
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
-        }catch (DataIntegrityViolationException e) {
-            return ResponseEntity.badRequest().body("Violação de integridade de dados.");
         }
     }
 }
