@@ -76,7 +76,7 @@ public class CidadeControler {
         } catch (EntidadeNaoEncontradaExeption e) {
             return ResponseEntity.notFound().build();
         } catch (EntidadeEmUsoExeption e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity   .status(HttpStatus.CONFLICT).build();
         }
     }
 
