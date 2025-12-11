@@ -1,10 +1,11 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
-import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.api.repository.CidadeRepository;
+import com.javanfood.javanfood.domain.model.Cidade;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +36,11 @@ public class CidadeRepositoryJpa implements CidadeRepository {
 
     @Override
     @Transactional
-    public void delete(Cidade cidade) {
-        cidade = findById(cidade.getId());
+    public void delete(Long id) {
+        Cidade cidade = findById(id);
+        if (cidade == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         entityManager.remove(cidade);
     }
 
