@@ -1,27 +1,27 @@
 package com.javanfood.javanfood.api.service;
 
-import com.javanfood.javanfood.api.repository.EnderecoRespository;
+import com.javanfood.javanfood.api.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
-import com.javanfood.javanfood.domain.model.Endereco;
+import com.javanfood.javanfood.domain.model.Estado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CadastroEnderecoService {
+public class CadastroEstadoService {
 
     @Autowired
-    EnderecoRespository enderecoRespository;
+    EstadoRespository estadoRespository;
 
-    public Endereco salvar(Endereco endereco) {
-        return enderecoRespository.adicionar(endereco);
+    public Estado salvar(Estado estado) {
+        return estadoRespository.adicionar(estado);
     }
 
     public void excluir(Long enderecoId) {
         try {
-            enderecoRespository.delete(enderecoId);
+            estadoRespository.delete(enderecoId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaExeption("Não existe cadastro de endereço com código: " + enderecoId);
         } catch (DataIntegrityViolationException e) {
