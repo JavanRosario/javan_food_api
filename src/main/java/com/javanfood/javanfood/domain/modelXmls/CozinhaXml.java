@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.api.model;
+package com.javanfood.javanfood.domain.modelXmls;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;

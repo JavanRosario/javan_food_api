@@ -1,6 +1,6 @@
-package com.javanfood.javanfood.api.service;
+package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.repository.EstadoRespository;
+import com.javanfood.javanfood.domain.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Estado;

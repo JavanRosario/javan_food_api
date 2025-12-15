@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.api.repository;
+package com.javanfood.javanfood.domain.repository;
 
 import com.javanfood.javanfood.domain.model.Cidade;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javanfood.javanfood.api.repository.RestauranteRepository;
-import com.javanfood.javanfood.api.service.CadastroRestauranteService;
+import com.javanfood.javanfood.domain.repository.RestauranteRepository;
+import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteControler {
+public class RestauranteControler  {
 
     @Autowired
     RestauranteRepository restauranteRepository;

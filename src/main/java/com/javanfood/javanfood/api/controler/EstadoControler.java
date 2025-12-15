@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.api.controler;
 
-import com.javanfood.javanfood.api.repository.EstadoRespository;
-import com.javanfood.javanfood.api.service.CadastroEstadoService;
+import com.javanfood.javanfood.domain.repository.EstadoRespository;
+import com.javanfood.javanfood.domain.service.CadastroEstadoService;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Estado;
