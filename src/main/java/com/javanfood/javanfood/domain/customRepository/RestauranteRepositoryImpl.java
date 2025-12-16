@@ -4,9 +4,6 @@ import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -23,14 +20,13 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     @Override
     public List<Restaurante> find(String nome, BigDecimal txFreteInicial, BigDecimal txFreteFinal) {
 
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        var jqpl = "from Restaurante where nome like " +
+                ":nome and taxaFrete between :txInicial and :txFinal";
 
-        CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
-
-        criteria.from(Restaurante.class);
-
-
-        TypedQuery<Restaurante> query = entityManager.createQuery(criteria);
-        return query.getResultList();
+        return entityManager.createQuery(jqpl, Restaurante.class)
+                .setParameter("nome", "%" + nome + "%")
+                .setParameter("txInicial", txFreteInicial)
+                .setParameter("txFinal", txFreteFinal)
+                .getResultList();
     }
 }
