@@ -5,6 +5,10 @@ import com.javanfood.javanfood.domain.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Estado;
+import com.javanfood.javanfood.domain.model.Restaurante;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,4 +42,6 @@ public class CadastroCidadeService {
             throw new EntidadeNaoEncontradaExeption("Cidade de código: " + cidadeId + " não pode ser removida. Está em uso.");
         }
     }
+    
+   
 }
