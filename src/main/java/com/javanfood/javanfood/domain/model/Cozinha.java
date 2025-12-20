@@ -3,6 +3,8 @@ package com.javanfood.javanfood.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.synth.SynthToggleButtonUI;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -29,5 +31,6 @@ public class Cozinha {
 	@JsonIgnore
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes = new ArrayList<>();
+	
 
 }
