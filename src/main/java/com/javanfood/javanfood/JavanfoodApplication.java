@@ -12,6 +12,6 @@ public class JavanfoodApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JavanfoodApplication.class, args);
 	}
-
+    
 }
 	
