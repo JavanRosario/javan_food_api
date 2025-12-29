@@ -24,12 +24,12 @@ public class TesteControler {
     public RestauranteRepository restauranteRepository;
 
     @GetMapping("/cozinhas/por-nome")
-    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
+    public List<Cozinha> cozinhasPorNome(@RequestParam String nome) {
         return cozinhaRepository.findByNomeContaining(nome);
     }
 
     @GetMapping("/cozinhas/unico-por-nome")
-    public Optional<Cozinha> cozinhaPorNome(@RequestParam("nome") String nome) {
+    public Optional<Cozinha> cozinhaPorNome(@RequestParam String nome) {
         return cozinhaRepository.findByNome(nome);
     }
 
