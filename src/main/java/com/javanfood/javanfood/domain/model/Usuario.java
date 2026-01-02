@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 @Entity
 @Data
 @EqualsAndHashCode
