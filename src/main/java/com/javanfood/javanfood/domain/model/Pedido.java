@@ -2,6 +2,7 @@ package com.javanfood.javanfood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -27,26 +29,40 @@ public class Pedido {
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@Column(name = "sub_total", nullable = false)
+	@Column(nullable = false)
 	private BigDecimal subTotal;
-	@Column(name = "taxa_frete", nullable = false)
+	@Column(nullable = false)
 	private BigDecimal taxaFrete;
-	@Column(name = "valor_total", nullable = false)
+	@Column(nullable = false)
 	private BigDecimal valorTotal;
-
-	@CreationTimestamp
-	private LocalDateTime dataCriacao;
-
-	@CreationTimestamp
-	private LocalDateTime dataConfirmacao;
-
-	@CreationTimestamp
-	private LocalDateTime dataEntrega;
 
 	@Embedded
 	private Endereco endereco;
 
+	private StatusPedido statusPedido;
+
+	@CreationTimestamp
+	private LocalDateTime dataCriacao;
+
+
+	private LocalDateTime dataConfirmacao;
+	private LocalDateTime dataEntrega;
+	private LocalDateTime dataCancelamento;
+
+
 	@OneToMany(mappedBy = "pedido")
-	private List<ItemPedido> itemPedido;
+	private List<ItemPedido> itens = new ArrayList<>();
+
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private FormaPagamento formaPagamento;
+
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Restaurante restaurante;
+
+	@ManyToOne
+	@JoinColumn(name = "usuario_cliente_id", nullable = false)
+	private Usuario usuario;
 
 }
