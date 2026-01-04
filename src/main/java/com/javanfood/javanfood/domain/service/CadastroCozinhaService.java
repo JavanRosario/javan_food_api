@@ -1,14 +1,14 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.domain.repository.CidadeRepository;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
+import com.javanfood.javanfood.domain.repository.CidadeRepository;
+import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 
 @Service
 public class CadastroCozinhaService {
