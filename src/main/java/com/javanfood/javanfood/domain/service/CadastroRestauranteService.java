@@ -1,8 +1,10 @@
 package com.javanfood.javanfood.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
@@ -36,9 +38,23 @@ public class CadastroRestauranteService {
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(
 						"Não existe cadastro de cozinha com código %d".formatted(cozinhaId)));
-		
+
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
+	}
+
+	public void excluir(Long restauranteId) {
+		
+		if (!restauranteRepository.existsById(restauranteId)) {
+			throw new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, restauranteId));
+		}
+
+		try {
+			restauranteRepository.deleteById(restauranteId);
+			restauranteRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoExeption(String.format(MSG_ENTIDADE_EM_USO, restauranteId));
+		}
 	}
 }
 
