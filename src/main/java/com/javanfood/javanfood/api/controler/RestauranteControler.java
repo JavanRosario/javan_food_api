@@ -56,7 +56,7 @@ public class RestauranteControler {
 		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalha(restauranteId);
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco",
-				"dataCadastro");
+				"dataCadastro","produtos");
 		return cadastroRestauranteService.salvar(restauranteAtual);
 
 	}

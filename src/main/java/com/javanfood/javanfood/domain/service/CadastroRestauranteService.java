@@ -8,7 +8,6 @@ import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.repository.PagamentoRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 
@@ -23,7 +22,7 @@ public class CadastroRestauranteService {
 	RestauranteRepository restauranteRepository;
 
 	@Autowired
-	CozinhaRepository cozinhaRepository;
+	CadastroCozinhaService cozinhaService;
 
 	@Autowired
 	PagamentoRepository pagamentoRepository;
@@ -35,16 +34,15 @@ public class CadastroRestauranteService {
 
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
-		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(
-						"Não existe cadastro de cozinha com código %d".formatted(cozinhaId)));
+
+		Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
 
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
 	}
 
 	public void excluir(Long restauranteId) {
-		
+
 		if (!restauranteRepository.existsById(restauranteId)) {
 			throw new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, restauranteId));
 		}
