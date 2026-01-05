@@ -1,12 +1,16 @@
 package com.javanfood.javanfood.api.controler;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
@@ -61,34 +66,28 @@ public class RestauranteControler {
 		cadastroRestauranteService.excluir(restauranteid);
 	}
 
-//	@PatchMapping("/{restauranteId}")
-//	public ResponseEntity<?> atualizarParcial(
-//			@PathVariable Long restauranteId,
-//			@RequestBody Map<String, Object> campos) {
-//
-//		Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
-//
-//		if (restauranteAtual.isEmpty()) {
-//			return ResponseEntity.notFound().build();
-//		}
-//
-//		merge(campos, restauranteAtual.orElse(null));
-//
-//		return atualizar(restauranteId, restauranteAtual.orElse(null));
-//	}
-//
-//	public void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
-//		camposOrigem.forEach((nomePropiedade, valorPropierade) -> {
-//
-//			ObjectMapper objectMapper = new ObjectMapper();
-//			Restaurante restauranteOrigem = objectMapper.convertValue(camposOrigem, Restaurante.class);
-//
-//			Field field = ReflectionUtils.findField(Restaurante.class, nomePropiedade);
-//			field.setAccessible(true);
-//
-//			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-//
-//			ReflectionUtils.setField(field, restauranteDestino, novoValor);
-//		});
-//	}
+	@PatchMapping("/{restauranteId}")
+	public Restaurante atualizarParcial(
+			@PathVariable Long restauranteId,
+			@RequestBody Map<String, Object> campos) {
+		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalha(restauranteId);
+
+		merge(campos, restauranteAtual);
+
+		return atualizar(restauranteId, restauranteAtual);
+	}
+
+	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
+
+		dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+			Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+			field.setAccessible(true);
+
+			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+
+			ReflectionUtils.setField(field, restauranteDestino, novoValor);
+		});
+	}
 }
