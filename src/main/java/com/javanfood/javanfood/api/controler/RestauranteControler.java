@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
@@ -47,7 +49,12 @@ public class RestauranteControler {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
-		return cadastroRestauranteService.salvar(restaurante);
+		try {
+			return cadastroRestauranteService.salvar(restaurante);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(e.getMessage());
+		}
+
 	}
 
 	@PutMapping("/{restauranteId}")
@@ -56,8 +63,13 @@ public class RestauranteControler {
 		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalha(restauranteId);
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco",
-				"dataCadastro","produtos");
-		return cadastroRestauranteService.salvar(restauranteAtual);
+				"dataCadastro", "produtos");
+
+		try {
+			return cadastroRestauranteService.salvar(restauranteAtual);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(e.getMessage());
+		}
 
 	}
 

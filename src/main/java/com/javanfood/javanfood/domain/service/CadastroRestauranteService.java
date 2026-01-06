@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.PagamentoRepository;
@@ -36,9 +37,13 @@ public class CadastroRestauranteService {
 		Long cozinhaId = restaurante.getCozinha().getId();
 
 		Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
+		try {
+			restaurante.setCozinha(cozinha);
+			return restauranteRepository.save(restaurante);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(String.format(MSG_ENTIDADE_EM_USO, restaurante));
+		}
 
-		restaurante.setCozinha(cozinha);
-		return restauranteRepository.save(restaurante);
 	}
 
 	public void excluir(Long restauranteId) {

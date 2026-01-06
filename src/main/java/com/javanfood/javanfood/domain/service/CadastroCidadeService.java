@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
-import com.javanfood.javanfood.domain.repository.EstadoRespository;
 
 @Service
 public class CadastroCidadeService {
@@ -25,16 +25,21 @@ public class CadastroCidadeService {
 
 	public Cidade buscaOuFalha(Long cidade_id) {
 		return cidadeRepository.findById(cidade_id)
-				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(String.format(MSG_CIDADE_NAO_ENCONTRADA, cidade_id)));
+				.orElseThrow(
+						() -> new EntidadeNaoEncontradaExeption(String.format(MSG_CIDADE_NAO_ENCONTRADA, cidade_id)));
 	}
 
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
-		
-		Estado estado = cadastroEstado.buscaOuFalha(estadoId);
 
-		cidade.setEstado(estado);
-		return cidadeRepository.save(cidade);
+		Estado estado = cadastroEstado.buscaOuFalha(estadoId);
+		try {
+			cidade.setEstado(estado);
+			return cidadeRepository.save(cidade);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(String.format(MSG_CIDADE_EM_USO, null));
+		}
+
 	}
 
 	public void excluir(Long cidadeId) {

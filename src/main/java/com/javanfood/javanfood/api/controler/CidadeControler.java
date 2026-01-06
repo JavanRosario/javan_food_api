@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
 import com.javanfood.javanfood.domain.service.CadastroCidadeService;
@@ -44,17 +46,24 @@ public class CidadeControler {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cidade adicionar(@RequestBody Cidade cidade) {
-		return cadastroCidadeService.salvar(cidade);
+		try {
+			return cadastroCidadeService.salvar(cidade);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(e.getMessage());
+		}
 	}
 
 	@PutMapping("/{cidadeId}")
 	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
-		
-		Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
-		
-		BeanUtils.copyProperties(cidade, cidadeAtual,"id");
 
-		return cadastroCidadeService.salvar(cidadeAtual);
+		Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
+
+		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+		try {
+			return cadastroCidadeService.salvar(cidadeAtual);
+		} catch (EntidadeNaoEncontradaExeption e) {
+			throw new NegocioExeption(e.getMessage());
+		}
 
 	}
 
