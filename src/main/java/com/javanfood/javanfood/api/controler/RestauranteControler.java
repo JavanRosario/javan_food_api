@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javanfood.javanfood.domain.exeption.CozinhaNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
@@ -51,7 +52,7 @@ public class RestauranteControler {
 	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
 		try {
 			return cadastroRestauranteService.salvar(restaurante);
-		} catch (EntidadeNaoEncontradaExeption e) {
+		} catch (CozinhaNaoEncontradoExeption e) {
 			throw new NegocioExeption(e.getMessage());
 		}
 
@@ -67,7 +68,7 @@ public class RestauranteControler {
 
 		try {
 			return cadastroRestauranteService.salvar(restauranteAtual);
-		} catch (EntidadeNaoEncontradaExeption e) {
+		} catch (CozinhaNaoEncontradoExeption e) {
 			throw new NegocioExeption(e.getMessage());
 		}
 

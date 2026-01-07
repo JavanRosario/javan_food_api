@@ -1,11 +1,14 @@
 package com.javanfood.javanfood.api.controler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javanfood.javanfood.api.exeptionhandler.Problema;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exeption.EstadoNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
@@ -48,7 +53,7 @@ public class CidadeControler {
 	public Cidade adicionar(@RequestBody Cidade cidade) {
 		try {
 			return cadastroCidadeService.salvar(cidade);
-		} catch (EntidadeNaoEncontradaExeption e) {
+		} catch (EstadoNaoEncontradoExeption e) {
 			throw new NegocioExeption(e.getMessage());
 		}
 	}
@@ -61,7 +66,7 @@ public class CidadeControler {
 		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 		try {
 			return cadastroCidadeService.salvar(cidadeAtual);
-		} catch (EntidadeNaoEncontradaExeption e) {
+		} catch (EstadoNaoEncontradoExeption e) {
 			throw new NegocioExeption(e.getMessage());
 		}
 
@@ -71,5 +76,23 @@ public class CidadeControler {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
 		cadastroCidadeService.excluir(cidadeId);
+	}
+
+	@ExceptionHandler(EntidadeNaoEncontradaExeption.class)
+	public ResponseEntity<?> tratarEstadoNaoEncontradoExeption(EntidadeNaoEncontradaExeption e) {
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.menssagem(e.getMessage())
+				.build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	}
+
+	@ExceptionHandler(NegocioExeption.class)
+	public ResponseEntity<?> tratarNegocio(NegocioExeption e) {
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.menssagem(e.getMessage())
+				.build();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
 	}
 }
