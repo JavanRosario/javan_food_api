@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.javanfood.javanfood.domain.exeption.CozinhaNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
@@ -14,8 +15,6 @@ public class CadastroCozinhaService {
 
 	private static final String MSG_ENTIDADE_EM_USO = "Cozinha de código: %d não pode ser removida, pois está em uso";
 
-	private static final String MSG_NAO_ENCONTRADO = "Não existe cadastro de cozinha com código: ";
-
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -23,7 +22,7 @@ public class CadastroCozinhaService {
 
 	public Cozinha buscarOuFalha(Long cozinha_id) {
 		return cozinhaRepository.findById(cozinha_id)
-				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, cozinha_id)));
+				.orElseThrow(() -> new CozinhaNaoEncontradoExeption(cozinha_id));
 	}
 
 	public Cozinha salvar(Cozinha cozinha) {
@@ -33,7 +32,7 @@ public class CadastroCozinhaService {
 	public void excluir(Long cozinhaId) {
 
 		if (!cozinhaRepository.existsById(cozinhaId)) {
-			throw new EntidadeNaoEncontradaExeption(MSG_NAO_ENCONTRADO + cozinhaId);
+			throw new CozinhaNaoEncontradoExeption(cozinhaId);
 		}
 
 		try {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
+import com.javanfood.javanfood.domain.exeption.RestauranteNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.PagamentoRepository;
@@ -17,7 +18,6 @@ public class CadastroRestauranteService {
 
 	private static final String MSG_ENTIDADE_EM_USO = "Restaurante de código: %d não pode ser removida, pois está em uso";
 
-	private static final String MSG_NAO_ENCONTRADO = "Não existe cadastro de Restaurante com código: %d";
 
 	@Autowired
 	RestauranteRepository restauranteRepository;
@@ -30,7 +30,7 @@ public class CadastroRestauranteService {
 
 	public Restaurante buscarOuFalha(Long restauranteId) {
 		return restauranteRepository.findById(restauranteId)
-				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, restauranteId)));
+				.orElseThrow(() -> new RestauranteNaoEncontradoExeption(restauranteId));
 	}
 
 	public Restaurante salvar(Restaurante restaurante) {
@@ -49,7 +49,7 @@ public class CadastroRestauranteService {
 	public void excluir(Long restauranteId) {
 
 		if (!restauranteRepository.existsById(restauranteId)) {
-			throw new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, restauranteId));
+			throw new RestauranteNaoEncontradoExeption(restauranteId);
 		}
 
 		try {

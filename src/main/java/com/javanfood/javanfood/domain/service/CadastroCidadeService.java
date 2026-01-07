@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.javanfood.javanfood.domain.exeption.CidadeNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
@@ -13,7 +14,6 @@ import com.javanfood.javanfood.domain.repository.CidadeRepository;
 
 @Service
 public class CadastroCidadeService {
-	private static final String MSG_CIDADE_NAO_ENCONTRADA = "Não existe cadastro de Cidade com esse código: %d";
 
 	private static final String MSG_CIDADE_EM_USO = "Cidade de código: %d não pode ser removida, pois está em uso";
 
@@ -23,10 +23,10 @@ public class CadastroCidadeService {
 	@Autowired
 	private CadastroEstadoService cadastroEstado;
 
-	public Cidade buscaOuFalha(Long cidade_id) {
-		return cidadeRepository.findById(cidade_id)
+	public Cidade buscaOuFalha(Long cidadeId) {
+		return cidadeRepository.findById(cidadeId)
 				.orElseThrow(
-						() -> new EntidadeNaoEncontradaExeption(String.format(MSG_CIDADE_NAO_ENCONTRADA, cidade_id)));
+						() -> new CidadeNaoEncontradoExeption(cidadeId));
 	}
 
 	public Cidade salvar(Cidade cidade) {
@@ -45,7 +45,7 @@ public class CadastroCidadeService {
 	public void excluir(Long cidadeId) {
 
 		if (!cidadeRepository.existsById(cidadeId)) {
-			throw new EntidadeNaoEncontradaExeption(String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId));
+			throw new CidadeNaoEncontradoExeption(cidadeId);
 		}
 
 		try {
