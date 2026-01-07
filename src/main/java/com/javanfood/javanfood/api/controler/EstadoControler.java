@@ -20,7 +20,7 @@ import com.javanfood.javanfood.domain.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.service.CadastroEstadoService;
 
 @RestController
-@RequestMapping("/enderecos")
+@RequestMapping("/estados")
 public class EstadoControler {
 
 	@Autowired
