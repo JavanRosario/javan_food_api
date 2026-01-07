@@ -6,6 +6,6 @@ public class RestauranteNaoEncontradoExeption extends EntidadeNaoEncontradaExept
 	}
 
 	public RestauranteNaoEncontradoExeption(Long restautanteId) {
-		this(String.format("Não existe Cozinha com código: %d", restautanteId));
+		this(String.format("Não existe um cadastro de Restaurante com código: %d", restautanteId));
 	}
 }
