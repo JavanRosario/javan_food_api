@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.javanfood.javanfood.domain.exeption.CozinhaNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 
@@ -34,11 +33,10 @@ public class CadastroCozinhaService {
 		if (!cozinhaRepository.existsById(cozinhaId)) {
 			throw new CozinhaNaoEncontradoExeption(cozinhaId);
 		}
-
 		try {
 			cozinhaRepository.deleteById(cozinhaId);
 			cozinhaRepository.flush();
-			
+
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoExeption(
 					String.format(MSG_ENTIDADE_EM_USO, cozinhaId));
