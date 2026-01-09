@@ -17,18 +17,24 @@ import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(EntidadeNaoEncontradaExeption.class)
-	public ResponseEntity<?> tratarEstadoNaoEncontradoExeption(EntidadeNaoEncontradaExeption e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	public ResponseEntity<?> handleEntidadeNaoEncontradoExeption(EntidadeNaoEncontradaExeption e, WebRequest request) {
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 
 	@ExceptionHandler(NegocioExeption.class)
-	public ResponseEntity<?> tratarNegocio(NegocioExeption e, WebRequest request) {
+	public ResponseEntity<?> handleNegocioException(NegocioExeption e, WebRequest request) {
 		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
 
 	@ExceptionHandler(EntidadeEmUsoExeption.class)
-	public ResponseEntity<?> tratarEntidadeEmUsoExeption(EntidadeEmUsoExeption e, WebRequest request) {
+	public ResponseEntity<?> handleEntidadeEmUsoExeption(EntidadeEmUsoExeption e, WebRequest request) {
 		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 
@@ -42,12 +48,12 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
 		if (body == null) {
 			body = Problem.builder()
-					.title(ex.getMessage())
+					.title(ex.getMessage())	
 					.status(statusCode.value())
 					.build();
 		} else if (body instanceof String) {
 			body = Problem.builder()
-					.title(ex.getMessage())
+					.title((String) body)
 					.status(statusCode.value())
 					.build();
 		}
@@ -55,5 +61,12 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		return super.handleExceptionInternal(ex, body, headers, statusCode, request);
 	}
 
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+		return Problem.builder()
+				.status(status.value())
+				.type(problemType.getUri())
+				.title(problemType.getTitle())
+				.detail(detail);
+	}
 
 }
