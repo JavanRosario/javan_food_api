@@ -1,5 +1,7 @@
 package com.javanfood.javanfood.api.exeptionhandler;
 
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
@@ -86,12 +89,43 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatusCode status,
 			WebRequest request) {
 
+
+		Throwable causaRaiz = ex.getCause();
+
+		if (causaRaiz instanceof InvalidFormatException) {
+			return handleInvalidFormatException((InvalidFormatException) causaRaiz, headers, status, request);
+		}
+
 		String detail = "O corpo da requisição está inválido. Verifique erro na sintaxe";
 		ProblemType problemType = ProblemType.CORPO_INCOMPREENSIVEL;
 		HttpStatus statusHttp = HttpStatus.BAD_REQUEST;
 		Problem problem = createProblemBuilder(statusHttp, problemType, detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+
+
+	private ResponseEntity<Object> handleInvalidFormatException(
+			InvalidFormatException ex,
+			HttpHeaders headers,
+			HttpStatusCode status,
+			WebRequest request) {
+
+		String path = ex.getPath().stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
+
+		ProblemType problemType = ProblemType.CORPO_INCOMPREENSIVEL;
+
+		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+		String detail = String.format("A propiedade '%s' recebeu o valor '%s', "
+				+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s",
+				path, ex.getValue(), ex.getTargetType().getSimpleName());
+
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
