@@ -1,5 +1,6 @@
 package com.javanfood.javanfood.api.exeptionhandler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		String detail = MSG_ERRO_GENERICA;
 
 		ProblemType problemType = ProblemType.ERRO_NO_SISTEMA;
-		Problem problem = createProblemBuilder(httpStatus, problemType, detail).build();
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).userMessage(MSG_ERRO_GENERICA).build();
 		return handleExceptionInternal(e, problem, new HttpHeaders(), httpStatus, webRequest);
 	}
 
@@ -104,7 +105,7 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 				+ "Corrija e informe o valor compatível com o tipo %s", ex.getName(), ex.getValue(),
 				ex.getRequiredType().getSimpleName());
 
-		Problem problem = createProblemBuilder(httpStatus, problemType, detail).build();
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).userMessage(MSG_ERRO_GENERICA).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -119,13 +120,17 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		if (body == null) {
 			body = Problem.builder()
+					.timeStamp(LocalDateTime.now())
 					.title(ex.getMessage())
 					.status(statusCode.value())
+					.userMessage(MSG_ERRO_GENERICA)
 					.build();
 		} else if (body instanceof String) {
 			body = Problem.builder()
+					.timeStamp(LocalDateTime.now())
 					.title((String) body)
 					.status(statusCode.value())
+					.userMessage(MSG_ERRO_GENERICA)
 					.build();
 		}
 
@@ -139,7 +144,6 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers,
 			HttpStatusCode status,
 			WebRequest request) {
-
 		HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
@@ -147,7 +151,7 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format("O recurso '%s', que você tentou acessar, é inexistente.",
 				ex.getResourcePath());
 
-		Problem problem = createProblemBuilder(httpStatus, problemType, detail).build();
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).userMessage(MSG_ERRO_GENERICA).build();
 
 		return handleExceptionInternal(ex, problem, headers, httpStatus, request);
 	}
@@ -159,7 +163,6 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers,
 			HttpStatusCode status,
 			WebRequest request) {
-
 
 		Throwable causaRaiz = ex.getCause();
 
@@ -176,7 +179,7 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		String detail = "O corpo da requisição está inválido. Verifique erro na sintaxe";
 		ProblemType problemType = ProblemType.CORPO_INCOMPREENSIVEL;
 		HttpStatus statusHttp = HttpStatus.BAD_REQUEST;
-		Problem problem = createProblemBuilder(statusHttp, problemType, detail).build();
+		Problem problem = createProblemBuilder(statusHttp, problemType, detail).userMessage(MSG_ERRO_GENERICA).build();
 
 		return handleExceptionInternal(ex, problem, headers, statusHttp, request);
 	}
@@ -186,7 +189,6 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers,
 			HttpStatusCode status,
 			WebRequest request) {
-
 
 		String path = joinPath(ex.getPath());
 
@@ -227,18 +229,22 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 				+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s",
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
-		Problem problem = createProblemBuilder(httpStatus, problemType, detail)
-				.userMessage(MSG_ERRO_GENERICA).build();
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).userMessage(MSG_ERRO_GENERICA).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
-	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+	private Problem.ProblemBuilder createProblemBuilder(
+			HttpStatus status,
+			ProblemType problemType,
+			String detail) {
 		return Problem.builder()
+				.timeStamp(LocalDateTime.now())
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
 				.detail(detail);
+
 	}
 
 }
