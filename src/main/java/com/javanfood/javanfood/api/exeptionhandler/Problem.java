@@ -19,12 +19,19 @@ public class Problem {
 	private String title;
 	private String detail;
 	private String userMessage;
-	private List<Field> fields;
+	private List<Object> objects;
 
 
 	@Getter
 	@Builder
 	public static class Field {
+		private String name;
+		private String userMessage;
+	}
+
+	@Getter
+	@Builder
+	public static class Object {
 		private String name;
 		private String userMessage;
 	}

@@ -1,7 +1,15 @@
 package com.javanfood.javanfood.domain.model;
 
 
-import jakarta.persistence.*;
+import com.javanfood.javanfood.core.validation.Groups;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,11 +18,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Estado {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Long id;
+	@Id
+	@NotNull(groups = Groups.EstadoId.class)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
+	private Long id;
 
-    @Column(nullable = false)
-    private String nome;
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
 }

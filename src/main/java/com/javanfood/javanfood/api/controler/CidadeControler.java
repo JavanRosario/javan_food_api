@@ -1,14 +1,11 @@
 package com.javanfood.javanfood.api.controler;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javanfood.javanfood.api.exeptionhandler.Problem;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.EstadoNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
 import com.javanfood.javanfood.domain.service.CadastroCidadeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidades")
@@ -50,7 +47,7 @@ public class CidadeControler {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cidade adicionar(@RequestBody Cidade cidade) {
+	public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
 		try {
 			return cadastroCidadeService.salvar(cidade);
 		} catch (EstadoNaoEncontradoExeption e) {
@@ -59,7 +56,7 @@ public class CidadeControler {
 	}
 
 	@PutMapping("/{cidadeId}")
-	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
 
 		Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
 

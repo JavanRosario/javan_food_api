@@ -19,6 +19,8 @@ import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.service.CadastroEstadoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/estados")
 public class EstadoControler {
@@ -40,14 +42,14 @@ public class EstadoControler {
 	}
 
 	@PostMapping
-	public Estado adicionar(@RequestBody Estado estado) {
+	public Estado adicionar(@RequestBody @Valid Estado estado) {
 		return cadastroEstadoService.salvar(estado);
 
 	}
 
 	@PutMapping("/{enderecoId}")
-	public Estado atualizar(@PathVariable Long enderecoId, @RequestBody Estado estado) {
-		
+	public Estado atualizar(@PathVariable Long enderecoId, @RequestBody @Valid Estado estado) {
+
 		Estado estadoAtual = cadastroEstadoService.buscaOuFalha(enderecoId);
 		BeanUtils.copyProperties(estado, estadoAtual, "id");
 		return cadastroEstadoService.salvar(estadoAtual);

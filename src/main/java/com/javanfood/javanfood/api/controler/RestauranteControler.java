@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javanfood.javanfood.domain.exeption.CozinhaNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
+import com.javanfood.javanfood.domain.exeption.ValidacaoExeption;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
@@ -37,10 +40,14 @@ import jakarta.validation.Valid;
 public class RestauranteControler {
 
 	@Autowired
-	RestauranteRepository restauranteRepository;
+	private RestauranteRepository restauranteRepository;
 
 	@Autowired
-	CadastroRestauranteService cadastroRestauranteService;
+	private CadastroRestauranteService cadastroRestauranteService;
+
+	@Autowired
+	private SmartValidator validator;
+
 
 	@GetMapping
 	public List<Restaurante> listar() {
@@ -64,7 +71,7 @@ public class RestauranteControler {
 	}
 
 	@PutMapping("/{restauranteId}")
-	public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
+	public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody @Valid Restaurante restaurante) {
 
 		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalha(restauranteId);
 
@@ -93,11 +100,26 @@ public class RestauranteControler {
 
 		merge(campos, restauranteAtual, request);
 
+		valide(restauranteAtual, "restaurante");
+
 		return atualizar(restauranteId, restauranteAtual);
 	}
 
+	private void valide(Restaurante restaurante, String objectName) {
+		BeanPropertyBindingResult result = new BeanPropertyBindingResult(restaurante, objectName);
+		validator.validate(restaurante, result);
+
+		if (result.hasErrors()) {
+			throw new ValidacaoExeption(result);
+		}
+	}
+
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
+		
+		
 		ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(request);
+		
+		
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);

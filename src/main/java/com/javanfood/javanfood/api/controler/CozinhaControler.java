@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -44,7 +45,7 @@ public class CozinhaControler {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+	public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
 		return cadastroCozinhaService.salvar(cozinha);
 	}
 

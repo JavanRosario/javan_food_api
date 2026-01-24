@@ -5,12 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,14 +29,27 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.exeption.NegocioExeption;
+import com.javanfood.javanfood.domain.exeption.ValidacaoExeption;
+import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
 
 @ControllerAdvice
 public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
+
+	private final CadastroRestauranteService cadastroRestauranteService;
+
+	@Autowired
+	private MessageSource messageSource;
 
 	private static final String MSG_TIPO_INVALIDO_CLIENTE_FINAL = "A propiedade '%s' recebeu o valor '%s',que é de um tipo inválido. Corrija e informe um valor compatível com o tipo inteiro.";
 	private static final String MSG_ERRO_GENERICA = "Ocorreu um erro interno inesperado no sistema. "
 			+ "Tente novamente e se o problema persistir, entre em contato"
 			+ " com o administrador do sistema";
+
+
+	ApiExeptionHandler(CadastroRestauranteService cadastroRestauranteService) {
+		this.cadastroRestauranteService = cadastroRestauranteService;
+	}
+
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> handleException(RuntimeException e, WebRequest webRequest) {
@@ -68,6 +85,15 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 
+
+	@ExceptionHandler(ValidacaoExeption.class)
+	protected ResponseEntity<Object> handleValidacaoExeption(
+			ValidacaoExeption ex,
+			WebRequest request) {
+
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(),
+				HttpStatus.BAD_REQUEST, request);
+	}
 
 	@ExceptionHandler(NegocioExeption.class)
 	public ResponseEntity<?> handleNegocioException(NegocioExeption e, WebRequest request) {
@@ -163,6 +189,38 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, httpStatus, request);
 	}
 
+	private ResponseEntity<Object> handleValidationInternal(
+			Exception ex,
+			BindingResult bindingResult,
+			HttpHeaders headers,
+			HttpStatus status,
+			WebRequest request) {
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+
+		List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream().<Problem.Object>map(objectError -> {
+			String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+
+			String name = objectError.getObjectName();
+
+			if (objectError instanceof FieldError) {
+				name = ((FieldError) objectError).getField();
+			}
+
+			return Problem.Object.builder()
+					.name(name)
+					.userMessage(message)
+					.build();
+		})
+				.collect(Collectors.toList());
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.objects(problemObjects)
+				.build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -170,25 +228,8 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers,
 			HttpStatusCode status,
 			WebRequest request) {
-		BindingResult bindingResult = ex.getBindingResult();
-
-		List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
-				.map(fieldError -> Problem.Field.builder()
-						.name(fieldError.getField())
-						.userMessage(fieldError.getDefaultMessage())
-						.build())
-				.collect(Collectors.toList());
-
-		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-
-		String detail = "Um ou mais campos estão inválidos, Faça o preenchimento correto e tente novamente";
-
-		Problem problem = createProblemBuilder(httpStatus, problemType, detail).fields(problemFields)
-				.userMessage(detail).build();
-
-		return super.handleExceptionInternal(ex, problem, headers, httpStatus, request);
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(),
+				HttpStatus.BAD_REQUEST, request);
 	}
 
 	@Override
@@ -284,5 +325,6 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 				.detail(detail);
 
 	}
+
 
 }

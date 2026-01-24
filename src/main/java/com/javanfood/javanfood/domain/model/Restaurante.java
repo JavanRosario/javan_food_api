@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.javanfood.javanfood.core.validation.Groups;
+import com.javanfood.javanfood.core.validation.ValorZeroIncluiDescricao;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -27,9 +29,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -43,12 +48,14 @@ public class Restaurante {
 	@Column(nullable = false)
 	private String nome;
 
+	@NotNull
 	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
 	@NotNull
 	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@JsonIgnoreProperties("hibernateLazyInitializer")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cozinha_id", nullable = false)
