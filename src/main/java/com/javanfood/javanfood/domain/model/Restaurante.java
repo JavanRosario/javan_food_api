@@ -36,8 +36,8 @@ import lombok.EqualsAndHashCode;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Entity
-@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
 public class Restaurante {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
