@@ -9,6 +9,8 @@ import com.javanfood.javanfood.domain.exeption.EstadoNaoEncontradoExeption;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.EstadoRespository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CadastroEstadoService {
 
@@ -23,10 +25,12 @@ public class CadastroEstadoService {
 				.orElseThrow(() -> new EstadoNaoEncontradoExeption(estadoId));
 	}
 
+	@Transactional
 	public Estado salvar(Estado estado) {
 		return estadoRespository.save(estado);
 	}
 
+	@Transactional
 	public void excluir(Long estadoId) {
 
 		if (!estadoRespository.existsById(estadoId)) {

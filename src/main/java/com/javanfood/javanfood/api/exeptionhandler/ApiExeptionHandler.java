@@ -1,6 +1,6 @@
 package com.javanfood.javanfood.api.exeptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -153,14 +153,14 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		if (body == null) {
 			body = Problem.builder()
-					.timeStamp(LocalDateTime.now())
+					.timeStamp(OffsetDateTime.now())
 					.title(ex.getMessage())
 					.status(statusCode.value())
 					.userMessage(MSG_ERRO_GENERICA)
 					.build();
 		} else if (body instanceof String) {
 			body = Problem.builder()
-					.timeStamp(LocalDateTime.now())
+					.timeStamp(OffsetDateTime.now())
 					.title((String) body)
 					.status(statusCode.value())
 					.userMessage(MSG_ERRO_GENERICA)
@@ -280,7 +280,6 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 
-
 	private String joinPath(List<Reference> references) {
 		return references.stream()
 				.map(ref -> ref.getFieldName())
@@ -318,15 +317,13 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			ProblemType problemType,
 			String detail) {
 		return Problem.builder()
-				.timeStamp(LocalDateTime.now())
+				.timeStamp(OffsetDateTime.now())
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
 				.detail(detail);
 
 	}
-
-
 
 
 }

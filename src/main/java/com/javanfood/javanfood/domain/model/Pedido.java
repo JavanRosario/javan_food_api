@@ -43,8 +43,6 @@ public class Pedido {
 
 	@CreationTimestamp
 	private LocalDateTime dataCriacao;
-
-
 	private LocalDateTime dataConfirmacao;
 	private LocalDateTime dataEntrega;
 	private LocalDateTime dataCancelamento;

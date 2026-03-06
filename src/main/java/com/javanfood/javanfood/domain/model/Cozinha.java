@@ -3,7 +3,6 @@ package com.javanfood.javanfood.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.javanfood.javanfood.core.validation.Groups;
 
 import jakarta.persistence.Column;
@@ -30,10 +29,9 @@ public class Cozinha {
 	@NotBlank
 	@Column(nullable = false)
 	private String nome;
-
-	@JsonIgnore
+	
+	
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes = new ArrayList<>();
-
 
 }

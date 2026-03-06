@@ -13,6 +13,8 @@ import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.PagamentoRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CadastroRestauranteService {
 
@@ -33,6 +35,7 @@ public class CadastroRestauranteService {
 				.orElseThrow(() -> new RestauranteNaoEncontradoExeption(restauranteId));
 	}
 
+	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 
@@ -46,6 +49,7 @@ public class CadastroRestauranteService {
 
 	}
 
+	@Transactional
 	public void excluir(Long restauranteId) {
 
 		if (!restauranteRepository.existsById(restauranteId)) {

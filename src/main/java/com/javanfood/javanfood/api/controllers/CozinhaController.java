@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.api.controler;
+package com.javanfood.javanfood.api.controllers;
 
 
 import java.util.List;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javanfood.javanfood.api.dto.CozinhaModel;
+import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaMapper;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
@@ -24,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaControler {
+public class CozinhaController {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -32,10 +34,13 @@ public class CozinhaControler {
 	@Autowired
 	private CadastroCozinhaService cadastroCozinhaService;
 
+	@Autowired
+	private CozinhaMapper cozinhaMapper;
+
 
 	@GetMapping
-	public List<Cozinha> listar() {
-		return cozinhaRepository.findAll();
+	public List<CozinhaModel> listar() {
+		return cozinhaMapper.toDtoCollection(cozinhaRepository.findAll());
 	}
 
 	@GetMapping("/{cozinha_id}")

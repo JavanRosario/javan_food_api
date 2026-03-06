@@ -1,7 +1,5 @@
 package com.javanfood.javanfood.domain.model;
 
-import org.hibernate.annotations.Comment;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;

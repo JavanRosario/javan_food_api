@@ -12,6 +12,8 @@ import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CadastroCidadeService {
 
@@ -29,6 +31,7 @@ public class CadastroCidadeService {
 						() -> new CidadeNaoEncontradoExeption(cidadeId));
 	}
 
+	@Transactional
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
 
@@ -42,6 +45,7 @@ public class CadastroCidadeService {
 
 	}
 
+	@Transactional
 	public void excluir(Long cidadeId) {
 
 		if (!cidadeRepository.existsById(cidadeId)) {

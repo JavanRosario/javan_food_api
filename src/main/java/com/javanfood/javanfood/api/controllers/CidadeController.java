@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.api.controler;
+package com.javanfood.javanfood.api.controllers;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidades")
-public class CidadeControler {
+public class CidadeController {
 
 
 	@Autowired
@@ -74,5 +74,8 @@ public class CidadeControler {
 	public void remover(@PathVariable Long cidadeId) {
 		cadastroCidadeService.excluir(cidadeId);
 	}
+
+
+
 
 }

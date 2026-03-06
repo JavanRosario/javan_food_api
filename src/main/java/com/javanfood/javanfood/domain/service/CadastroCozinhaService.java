@@ -9,6 +9,8 @@ import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CadastroCozinhaService {
 
@@ -24,10 +26,12 @@ public class CadastroCozinhaService {
 				.orElseThrow(() -> new CozinhaNaoEncontradoExeption(cozinha_id));
 	}
 
+	@Transactional
 	public Cozinha salvar(Cozinha cozinha) {
 		return cozinhaRepository.save(cozinha);
 	}
 
+	@Transactional
 	public void excluir(Long cozinhaId) {
 
 		if (!cozinhaRepository.existsById(cozinhaId)) {
