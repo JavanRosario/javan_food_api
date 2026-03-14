@@ -1,64 +1,56 @@
 package com.javanfood.javanfood.api.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.javanfood.javanfood.api.dto.response.EstadoResponse;
+import com.javanfood.javanfood.api.dto.request.EstadoRequest;
+import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoRequestMapper;
+import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoResponseMapper;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.EstadoRespository;
 import com.javanfood.javanfood.domain.service.CadastroEstadoService;
-
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/estados")
+@AllArgsConstructor
 public class EstadoController {
 
-	@Autowired
-	private EstadoRespository estadoRespository;
+    private final EstadoRespository estadoRespository;
+    private final CadastroEstadoService cadastroEstadoService;
+    private final EstadoResponseMapper estadoResponseMapper;
+    private final EstadoRequestMapper estadoRequestMapper;
 
-	@Autowired
-	private CadastroEstadoService cadastroEstadoService;
+    @GetMapping
+    public List<EstadoResponse> listar() {
+        return estadoResponseMapper.toDtoCollection(estadoRespository.findAll());
+    }
 
-	@GetMapping
-	public List<Estado> listar() {
-		return estadoRespository.findAll();
-	}
+    @GetMapping("/{estadoId}")
+    public EstadoResponse listarid(@PathVariable Long estadoId) {
+        return estadoResponseMapper.toDto(cadastroEstadoService.buscaOuFalha(estadoId));
+    }
 
-	@GetMapping("/{estadoId}")
-	public Estado listarid(@PathVariable Long estadoId) {
-		return cadastroEstadoService.buscaOuFalha(estadoId);
-	}
+    @PostMapping
+    public EstadoResponse adicionar(@RequestBody @Valid EstadoRequest estadoRequest) {
+        Estado estado = estadoRequestMapper.toDomainObject(estadoRequest);
+        return estadoResponseMapper.toDto(cadastroEstadoService.salvar(estado));
+    }
 
-	@PostMapping
-	public Estado adicionar(@RequestBody @Valid Estado estado) {
-		return cadastroEstadoService.salvar(estado);
+    @PutMapping("/{estadoId}")
+    public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoRequest estadoRequest) {
+        Estado estadoAtual = cadastroEstadoService.buscaOuFalha(estadoId);
+        estadoRequestMapper.updateEntityFromDTO(estadoRequest, estadoAtual);
+        return cadastroEstadoService.salvar(estadoAtual);
+    }
 
-	}
-
-	@PutMapping("/{enderecoId}")
-	public Estado atualizar(@PathVariable Long enderecoId, @RequestBody @Valid Estado estado) {
-
-		Estado estadoAtual = cadastroEstadoService.buscaOuFalha(enderecoId);
-		BeanUtils.copyProperties(estado, estadoAtual, "id");
-		return cadastroEstadoService.salvar(estadoAtual);
-	}
-
-	@DeleteMapping("/{enderecoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long enderecoId) {
-		cadastroEstadoService.excluir(enderecoId);
-	}
+    @DeleteMapping("/{estadoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long estadoId) {
+        cadastroEstadoService.excluir(estadoId);
+    }
 
 }

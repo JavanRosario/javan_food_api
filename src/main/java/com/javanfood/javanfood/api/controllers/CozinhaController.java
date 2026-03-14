@@ -1,73 +1,63 @@
 package com.javanfood.javanfood.api.controllers;
 
 
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.javanfood.javanfood.api.dto.CozinhaModel;
-import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaMapper;
+import com.javanfood.javanfood.api.dto.request.CozinhaRequest;
+import com.javanfood.javanfood.api.dto.response.CozinhaResponse;
+import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaRequestMapper;
+import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaResponseMapper;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
-
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cozinhas")
+@AllArgsConstructor
 public class CozinhaController {
+    private final CadastroCozinhaService cadastroCozinhaService;
+    private final CozinhaResponseMapper cozinhaResponseMapper;
+    private final CozinhaRepository cozinhaRepository;
+    private final CozinhaRequestMapper cozinhaRequestMapper;
 
-	@Autowired
-	private CozinhaRepository cozinhaRepository;
+    @GetMapping
+    public List<CozinhaResponse> listar() {
+        return cozinhaResponseMapper.toDtoCollection(cozinhaRepository.findAll());
+    }
 
-	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
+    @GetMapping("/{cozinha_id}")
+    public CozinhaResponse listarId(@PathVariable Long cozinha_id) {
+        Cozinha cozinha = cadastroCozinhaService.buscarOuFalha(cozinha_id);
+        return cozinhaResponseMapper.cozinhaDto(cozinha);
+    }
 
-	@Autowired
-	private CozinhaMapper cozinhaMapper;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CozinhaResponse adicionar(@RequestBody @Valid CozinhaRequest cozinhaRequest) {
 
+        Cozinha cozinha = cozinhaRequestMapper.toDomainObject(cozinhaRequest);
+        cozinha = cadastroCozinhaService.salvar(cozinha);
+        return cozinhaResponseMapper.cozinhaDto(cozinha);
 
-	@GetMapping
-	public List<CozinhaModel> listar() {
-		return cozinhaMapper.toDtoCollection(cozinhaRepository.findAll());
-	}
+    }
 
-	@GetMapping("/{cozinha_id}")
-	public Cozinha listarId(@PathVariable Long cozinha_id) {
-		return cadastroCozinhaService.buscarOuFalha(cozinha_id);
-	}
+    @PutMapping("/{cozinha_id}")
+    public CozinhaResponse atualizar(@PathVariable Long cozinha_id, @RequestBody CozinhaRequest cozinhaRequest) {
+        Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalha(cozinha_id);
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
-		return cadastroCozinhaService.salvar(cozinha);
-	}
+        cozinhaRequestMapper.updateEntityFromDto(cozinhaRequest, cozinhaAtual);
 
-	@PutMapping("/{cozinha_id}")
-	public Cozinha atualizar(@PathVariable Long cozinha_id, @RequestBody Cozinha cozinha) {
+        return cozinhaResponseMapper.cozinhaDto(cadastroCozinhaService.salvar(cozinhaAtual));
 
-		Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalha(cozinha_id);
+    }
 
-		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-
-		return cadastroCozinhaService.salvar(cozinhaAtual);
-
-	}
-
-	@DeleteMapping("/{cozinha_id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable long cozinha_id) {
-		cadastroCozinhaService.excluir(cozinha_id);
-	}
+    @DeleteMapping("/{cozinha_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable long cozinha_id) {
+        cadastroCozinhaService.excluir(cozinha_id);
+    }
 }
