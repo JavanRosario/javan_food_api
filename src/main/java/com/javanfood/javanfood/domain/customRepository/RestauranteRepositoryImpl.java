@@ -43,14 +43,14 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         List<Predicate> predicates = new ArrayList<>();
 
         if (StringUtils.hasText(nome)) {
-            Predicate nomePredicate = builder.like(root.get("nome"), "%" + nome + "%");
+            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
         }
         if (txFreteInicial != null) {
-            Predicate taxaMenorOuIgual = builder.greaterThanOrEqualTo(root.get("taxaFrete"), txFreteInicial);
+            predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), txFreteInicial));
         }
 
         if (txFreteFinal != null) {
-            Predicate taxaMenorOuIgual2 = builder.greaterThanOrEqualTo(root.get("taxaFrete"), txFreteFinal);
+            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), txFreteFinal));
         }
 
 

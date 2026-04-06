@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.api.exeptionhandler;
+package com.javanfood.javanfood.api.exceptionhandler;
 
 import java.time.OffsetDateTime;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.domain.exeption;
+package com.javanfood.javanfood.domain.exception;
 
 import org.springframework.validation.BindingResult;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ValidacaoExeption extends RuntimeException {
+public class ValidacaoException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
 	private BindingResult bindingResult;

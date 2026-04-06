@@ -7,6 +7,8 @@ public record RestauranteResponse(
         Long id,
         String nome,
         BigDecimal taxaFrete,
-        CozinhaResponse cozinha
+        CozinhaResponse cozinha,
+        Boolean ativo,
+        EnderecoResponse endereco
 ) {
 }

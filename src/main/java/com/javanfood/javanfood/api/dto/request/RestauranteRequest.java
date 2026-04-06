@@ -24,4 +24,10 @@ public class RestauranteRequest {
     @NotNull
     private CozinhaIdRequest cozinha;
 
+    private Boolean ativo;
+
+    @Valid
+    @NotNull
+    private EnderecoRequest endereco;
+
 }

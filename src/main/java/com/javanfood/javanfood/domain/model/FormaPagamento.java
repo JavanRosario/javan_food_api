@@ -18,5 +18,4 @@ public class FormaPagamento {
     @Column(nullable = false)
     private String descricao;
 
-
 }

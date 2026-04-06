@@ -25,7 +25,7 @@ public class ItemPedido {
 	private Integer quantidade;
 
 	@Column(nullable = false)
-	private BigDecimal precoUnitatio;
+	private BigDecimal precoUnitario;
 
 	@Column(nullable = false)
 	private BigDecimal precoTotal;

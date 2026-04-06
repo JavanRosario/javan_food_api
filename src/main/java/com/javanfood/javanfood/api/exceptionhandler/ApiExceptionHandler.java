@@ -1,12 +1,12 @@
-package com.javanfood.javanfood.api.exeptionhandler;
+package com.javanfood.javanfood.api.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
-import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
-import com.javanfood.javanfood.domain.exeption.NegocioExeption;
-import com.javanfood.javanfood.domain.exeption.ValidacaoExeption;
+import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
+import com.javanfood.javanfood.domain.exception.EntidadeNaoEncontradaException;
+import com.javanfood.javanfood.domain.exception.NegocioException;
+import com.javanfood.javanfood.domain.exception.ValidacaoException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 @AllArgsConstructor
-public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
 
@@ -53,8 +53,8 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(EntidadeNaoEncontradaExeption.class)
-    public ResponseEntity<?> handleEntidadeNaoEncontradoException(EntidadeNaoEncontradaExeption e, WebRequest request) {
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<?> handleEntidadeNaoEncontradoException(EntidadeNaoEncontradaException e, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         String detail = e.getMessage();
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
@@ -64,8 +64,8 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(EntidadeEmUsoExeption.class)
-    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoExeption e, WebRequest request) {
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
         String detail = e.getMessage();
         ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
@@ -77,17 +77,17 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(ValidacaoExeption.class)
-    protected ResponseEntity<Object> handleValidacaoExeption(
-            ValidacaoExeption ex,
+    @ExceptionHandler(ValidacaoException.class)
+    protected ResponseEntity<Object> handleValidacaoException(
+            ValidacaoException ex,
             WebRequest request) {
 
         return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(),
                 HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(NegocioExeption.class)
-    public ResponseEntity<?> handleNegocioException(NegocioExeption e, WebRequest request) {
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String detail = e.getMessage();
         ProblemType problemType = ProblemType.ERRO_NEGOCIO;

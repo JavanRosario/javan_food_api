@@ -1,6 +1,7 @@
 package com.javanfood.javanfood.api.mapper.restauranteMapper;
 
 import com.javanfood.javanfood.api.dto.response.RestauranteResponse;
+import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.mapstruct.Mapper;
 
@@ -13,6 +14,8 @@ public interface RestauranteResponseMapper {
 
     List<RestauranteResponse> toDtoCollection(List<Restaurante> restaurantes);
 
-
+    default String map(Estado estado) {
+        return estado != null ? estado.getNome() : null;
+    }
 }
 

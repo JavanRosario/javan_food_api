@@ -13,12 +13,12 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exception.EntidadeNaoEncontradaException;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
-import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
+import com.javanfood.javanfood.domain.service.RestauranteService;
 import com.javanfood.javanfood.util.DataBaseCleaner;
 
 import io.restassured.RestAssured;
@@ -36,7 +36,7 @@ public class CadastroRestauranteApplication {
 	private RestauranteRepository restauranteRepository;
 
 	@Autowired
-	private CadastroRestauranteService cadastroRestauranteService;
+	private RestauranteService restauranteService;
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -96,8 +96,8 @@ public class CadastroRestauranteApplication {
 	public void deveLancarException_QuandoExcluirRestauranteInexistente() {
 		Long restauranteId = -1L;
 
-		assertThrows(EntidadeNaoEncontradaExeption.class, () -> {
-			cadastroRestauranteService.excluir(restauranteId);
+		assertThrows(EntidadeNaoEncontradaException.class, () -> {
+			restauranteService.excluir(restauranteId);
 		});
 
 	}

@@ -15,13 +15,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
+import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
+import com.javanfood.javanfood.domain.exception.EntidadeNaoEncontradaException;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
-import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
+import com.javanfood.javanfood.domain.service.CozinhaService;
 import com.javanfood.javanfood.util.DataBaseCleaner;
 import com.javanfood.javanfood.util.ResourseUtils;
 
@@ -45,7 +45,7 @@ class CadastroCozinhaApplicationIT {
 	private int port;
 
 	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
+	private CozinhaService cozinhaService;
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -126,7 +126,7 @@ class CadastroCozinhaApplicationIT {
 		Cozinha exemploCozinha = new Cozinha();
 		exemploCozinha.setNome("Chinesa");
 
-		exemploCozinha = cadastroCozinhaService.salvar(exemploCozinha);
+		exemploCozinha = cozinhaService.salvar(exemploCozinha);
 
 		assertThat(exemploCozinha).isNotNull();
 		assertThat(exemploCozinha.getId()).isNotNull();
@@ -141,7 +141,7 @@ class CadastroCozinhaApplicationIT {
 
 
 		assertThrows(ConstraintViolationException.class, () -> {
-			cadastroCozinhaService.salvar(novaCozinha);
+			cozinhaService.salvar(novaCozinha);
 		});
 	}
 
@@ -150,8 +150,8 @@ class CadastroCozinhaApplicationIT {
 		Long cozinhaId = 1L;
 
 
-		assertThrows(EntidadeEmUsoExeption.class, () -> {
-			cadastroCozinhaService.excluir(cozinhaId);
+		assertThrows(EntidadeEmUsoException.class, () -> {
+			cozinhaService.excluir(cozinhaId);
 		});
 
 	}
@@ -160,8 +160,8 @@ class CadastroCozinhaApplicationIT {
 	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
 		Long cozinhaId = -1L;
 
-		assertThrows(EntidadeNaoEncontradaExeption.class, () -> {
-			cadastroCozinhaService.excluir(cozinhaId);
+		assertThrows(EntidadeNaoEncontradaException.class, () -> {
+			cozinhaService.excluir(cozinhaId);
 		});
 	}
 

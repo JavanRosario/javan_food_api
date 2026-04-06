@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EstadoRequest {
+public class GrupoRequest {
 
     @NotBlank
     private String nome;

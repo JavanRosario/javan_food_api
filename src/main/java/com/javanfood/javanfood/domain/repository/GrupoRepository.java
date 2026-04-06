@@ -1,10 +1,9 @@
 package com.javanfood.javanfood.domain.repository;
 
-import com.javanfood.javanfood.domain.model.Estado;
+import com.javanfood.javanfood.domain.model.Grupo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EstadoRespository extends JpaRepository<Estado, Long> {
-
+public interface GrupoRepository extends JpaRepository<Grupo, Long> {
 }

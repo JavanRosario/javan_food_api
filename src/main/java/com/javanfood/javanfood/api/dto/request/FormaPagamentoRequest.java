@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EstadoRequest {
+public class FormaPagamentoRequest {
 
     @NotBlank
-    private String nome;
+    String descricao;
 }

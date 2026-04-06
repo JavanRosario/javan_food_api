@@ -12,5 +12,6 @@ public interface CidadeRequestMapper {
     Cidade toDomainObject(CidadeRequest cidadeRequest);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "estado", ignore = true)
     void updateEntityFromDto(CidadeRequest cidadeRequest, @MappingTarget Cidade cidade);
 }

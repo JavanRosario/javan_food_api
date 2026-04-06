@@ -1,9 +1,9 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.domain.exeption.CidadeNaoEncontradoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
-import com.javanfood.javanfood.domain.exeption.NegocioExeption;
+import com.javanfood.javanfood.api.dto.request.CidadeRequest;
+import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeRequestMapper;
+import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradoException;
+import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
@@ -14,44 +14,47 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CadastroCidadeService {
+public class CidadeService {
 
     private static final String MSG_CIDADE_EM_USO = "Cidade de código: %d não pode ser removida, pois está em uso";
     private final CidadeRepository cidadeRepository;
-    private final CadastroEstadoService cadastroEstado;
+    private final EstadoService cadastroEstado;
+    private final CidadeRequestMapper cidadeRequestMapper;
 
     public Cidade buscaOuFalha(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
                 .orElseThrow(
-                        () -> new CidadeNaoEncontradoExeption(cidadeId));
+                        () -> new CidadeNaoEncontradoException(cidadeId));
+    }
+
+    @Transactional
+    public Cidade atualizar(Long id, CidadeRequest request) {
+        Cidade cidade = buscaOuFalha(id);
+        cidadeRequestMapper.updateEntityFromDto(request, cidade);
+        cidade.setEstado(cadastroEstado.buscaOuFalha(request.getEstado().getId()));
+        return salvar(cidade);
     }
 
     @Transactional
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-
         Estado estado = cadastroEstado.buscaOuFalha(estadoId);
-        try {
-            cidade.setEstado(estado);
-            return cidadeRepository.save(cidade);
-        } catch (EntidadeNaoEncontradaExeption e) {
-            throw new NegocioExeption(String.format(MSG_CIDADE_EM_USO, null));
-        }
-
+        cidade.setEstado(estado);
+        return cidadeRepository.save(cidade);
     }
 
     @Transactional
     public void excluir(Long cidadeId) {
 
         if (!cidadeRepository.existsById(cidadeId)) {
-            throw new CidadeNaoEncontradoExeption(cidadeId);
+            throw new CidadeNaoEncontradoException(cidadeId);
         }
 
         try {
             cidadeRepository.deleteById(cidadeId);
             cidadeRepository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoExeption(String.format(MSG_CIDADE_EM_USO, cidadeId));
+            throw new EntidadeEmUsoException(String.format(MSG_CIDADE_EM_USO, cidadeId));
         }
     }
 }
