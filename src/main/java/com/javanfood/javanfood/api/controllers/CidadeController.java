@@ -4,8 +4,6 @@ import com.javanfood.javanfood.api.dto.request.CidadeRequest;
 import com.javanfood.javanfood.api.dto.response.CidadeResponse;
 import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeRequestMapper;
 import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeResponseMapper;
-import com.javanfood.javanfood.domain.exception.EstadoNaoEncontradoException;
-import com.javanfood.javanfood.domain.exception.NegocioException;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.repository.CidadeRepository;
 import com.javanfood.javanfood.domain.service.CidadeService;
