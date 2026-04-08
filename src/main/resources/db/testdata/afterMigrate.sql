@@ -42,7 +42,10 @@ ALTER TABLE usuario_grupo AUTO_INCREMENT = 1;
 SET
 FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO estado (nome)
+INSERT INTO usuario (nome, email, senha, data_cadastro)
+values ("javan", "corno@gmail.com", "123", UTC_TIMESTAMP());
+INSERT
+INTO estado (nome)
 VALUES ('Rio de Janeiro');
 INSERT INTO estado (nome)
 VALUES ('São Paulo');
