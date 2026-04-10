@@ -5,7 +5,6 @@ import com.javanfood.javanfood.api.dto.response.GrupoResponse;
 import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoRequestMapper;
 import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoResponseMapper;
 import com.javanfood.javanfood.domain.model.Grupo;
-import com.javanfood.javanfood.domain.repository.GrupoRepository;
 import com.javanfood.javanfood.domain.service.GrupoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +17,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/grupos")
 public class GrupoController {
-    private final GrupoRepository grupoRepository;
     private final GrupoService grupoService;
     private final GrupoResponseMapper grupoResponseMapper;
     private final GrupoRequestMapper grupoRequestMapper;
 
     @GetMapping
     public List<GrupoResponse> listar() {
-        return grupoResponseMapper.toDtoCollection(grupoRepository.findAll());
+        return grupoResponseMapper.toDtoCollection(grupoService.listar());
     }
 
     @GetMapping("/{grupoId}")
-    public GrupoResponse listarId(@PathVariable Long grupoId) {
-        return grupoResponseMapper.toDto(grupoService.buscaOuFalha(grupoId));
+    public GrupoResponse buscarPorId(@PathVariable Long grupoId) {
+        return grupoResponseMapper.toDto(grupoService.buscarOuFalha(grupoId));
     }
 
     @PostMapping
@@ -47,8 +45,8 @@ public class GrupoController {
 
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void Deletar(@PathVariable Long grupoId) {
-        grupoService.deletar(grupoId);
+    void deletar(@PathVariable Long grupoId) {
+        grupoService.excluir(grupoId);
     }
 
 

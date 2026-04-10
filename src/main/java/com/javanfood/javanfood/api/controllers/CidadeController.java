@@ -5,7 +5,6 @@ import com.javanfood.javanfood.api.dto.response.CidadeResponse;
 import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeRequestMapper;
 import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeResponseMapper;
 import com.javanfood.javanfood.domain.model.Cidade;
-import com.javanfood.javanfood.domain.repository.CidadeRepository;
 import com.javanfood.javanfood.domain.service.CidadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CidadeController {
 
-    private final CidadeRepository cidadeRepository;
     private final CidadeService cidadeService;
     private final CidadeResponseMapper cidadeResponseMapper;
     private final CidadeRequestMapper cidadeRequestMapper;
@@ -27,12 +25,12 @@ public class CidadeController {
 
     @GetMapping
     public List<CidadeResponse> listar() {
-        return cidadeResponseMapper.toDtoCollection(cidadeRepository.findAll());
+        return cidadeResponseMapper.toDtoCollection(cidadeService.listar());
     }
 
     @GetMapping("/{cidadeId}")
-    public CidadeResponse listarId(@PathVariable Long cidadeId) {
-        return cidadeResponseMapper.toDto(cidadeService.buscaOuFalha(cidadeId));
+    public CidadeResponse buscarPorId(@PathVariable Long cidadeId) {
+        return cidadeResponseMapper.toDto(cidadeService.buscarOuFalha(cidadeId));
     }
 
     @PostMapping

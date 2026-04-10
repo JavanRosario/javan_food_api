@@ -6,7 +6,6 @@ import com.javanfood.javanfood.api.dto.response.CozinhaResponse;
 import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaRequestMapper;
 import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaResponseMapper;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.service.CozinhaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +20,15 @@ import java.util.List;
 public class CozinhaController {
     private final CozinhaService cozinhaService;
     private final CozinhaResponseMapper cozinhaResponseMapper;
-    private final CozinhaRepository cozinhaRepository;
     private final CozinhaRequestMapper cozinhaRequestMapper;
 
     @GetMapping
     public List<CozinhaResponse> listar() {
-        return cozinhaResponseMapper.toDtoCollection(cozinhaRepository.findAll());
+        return cozinhaResponseMapper.toDtoCollection(cozinhaService.listar());
     }
 
     @GetMapping("/{cozinhaId}")
-    public CozinhaResponse listarId(@PathVariable Long cozinhaId) {
+    public CozinhaResponse buscarPorId(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
         return cozinhaResponseMapper.cozinhaDto(cozinha);
     }
@@ -45,11 +43,7 @@ public class CozinhaController {
 
     @PutMapping("/{cozinhaId}")
     public CozinhaResponse atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaRequest cozinhaRequest) {
-        Cozinha cozinhaAtual = cozinhaService.buscarOuFalha(cozinhaId);
-
-        cozinhaRequestMapper.updateEntityFromDto(cozinhaRequest, cozinhaAtual);
-
-        return cozinhaResponseMapper.cozinhaDto(cozinhaService.salvar(cozinhaAtual));
+        return cozinhaResponseMapper.cozinhaDto(cozinhaService.atualizar(cozinhaId, cozinhaRequest));
     }
 
     @DeleteMapping("/{cozinhaId}")

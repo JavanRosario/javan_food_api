@@ -5,7 +5,6 @@ import com.javanfood.javanfood.api.dto.request.EstadoRequest;
 import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoRequestMapper;
 import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoResponseMapper;
 import com.javanfood.javanfood.domain.model.Estado;
-import com.javanfood.javanfood.domain.repository.EstadoRepository;
 import com.javanfood.javanfood.domain.service.EstadoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EstadoController {
 
-    private final EstadoRepository estadoRepository;
     private final EstadoService estadoService;
     private final EstadoResponseMapper estadoResponseMapper;
     private final EstadoRequestMapper estadoRequestMapper;
 
     @GetMapping
     public List<EstadoResponse> listar() {
-        return estadoResponseMapper.toDtoCollection(estadoRepository.findAll());
+        return estadoResponseMapper.toDtoCollection(estadoService.listar());
     }
 
     @GetMapping("/{estadoId}")
-    public EstadoResponse listarId(@PathVariable Long estadoId) {
-        return estadoResponseMapper.toDto(estadoService.buscaOuFalha(estadoId));
+    public EstadoResponse buscarPorId(@PathVariable Long estadoId) {
+        return estadoResponseMapper.toDto(estadoService.buscarOuFalha(estadoId));
     }
 
     @PostMapping
@@ -43,9 +41,7 @@ public class EstadoController {
 
     @PutMapping("/{estadoId}")
     public EstadoResponse atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoRequest estadoRequest) {
-        Estado estadoAtual = estadoService.buscaOuFalha(estadoId);
-        estadoRequestMapper.updateEntityFromDTO(estadoRequest, estadoAtual);
-        return estadoResponseMapper.toDto(estadoService.salvar(estadoAtual));
+        return estadoResponseMapper.toDto(estadoService.atualizar(estadoId, estadoRequest));
     }
 
     @DeleteMapping("/{estadoId}")

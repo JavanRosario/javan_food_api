@@ -5,7 +5,6 @@ import com.javanfood.javanfood.api.dto.response.FormaPagamentoResponse;
 import com.javanfood.javanfood.api.mapper.formaPagamentoMapper.FormaPagamentoRequestMapper;
 import com.javanfood.javanfood.api.mapper.formaPagamentoMapper.FormaPagamentoResponseMapper;
 import com.javanfood.javanfood.domain.model.FormaPagamento;
-import com.javanfood.javanfood.domain.repository.FormaPagamentoRepository;
 import com.javanfood.javanfood.domain.service.FormaPagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/pagamentos")
 @RequiredArgsConstructor
 public class FormaPagamentoController {
-    private final FormaPagamentoRepository formaPagamentoRepository;
     private final FormaPagamentoResponseMapper formaPagamentoResponseMapper;
     private final FormaPagamentoService formaPagamentoService;
     private final FormaPagamentoRequestMapper formaPagamentoRequestMapper;
@@ -26,12 +24,12 @@ public class FormaPagamentoController {
 
     @GetMapping
     public List<FormaPagamentoResponse> listar() {
-        return formaPagamentoResponseMapper.toDtoCollection(formaPagamentoRepository.findAll());
+        return formaPagamentoResponseMapper.toDtoCollection(formaPagamentoService.listar());
     }
 
     @GetMapping("/{pagamentoId}")
-    public FormaPagamentoResponse listarId(@PathVariable Long pagamentoId) {
-        FormaPagamento formaPagamento = formaPagamentoService.buscaOuFalha(pagamentoId);
+    public FormaPagamentoResponse buscarPorId(@PathVariable Long pagamentoId) {
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalha(pagamentoId);
         return formaPagamentoResponseMapper.toDto(formaPagamento);
     }
 
@@ -44,9 +42,7 @@ public class FormaPagamentoController {
 
     @PutMapping("/{pagamentoId}")
     public FormaPagamentoResponse atualizar(@PathVariable Long pagamentoId, @RequestBody @Valid FormaPagamentoRequest formaPagamentoRequest) {
-        FormaPagamento formaPagamento = formaPagamentoService.buscaOuFalha(pagamentoId);
-        formaPagamentoRequestMapper.updateEntityFromDto(formaPagamentoRequest, formaPagamento);
-        return formaPagamentoResponseMapper.toDto(formaPagamentoService.salvar(formaPagamento));
+        return formaPagamentoResponseMapper.toDto(formaPagamentoService.atualizar(pagamentoId, formaPagamentoRequest));
     }
 
     @DeleteMapping("/{pagamentoId}")
