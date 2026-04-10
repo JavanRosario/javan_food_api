@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,7 @@ public class Usuario {
     private String email;
     @Column(nullable = false)
     private String senha;
+
 
     @Column(nullable = false, name = "data_cadastro")
     @CreationTimestamp
