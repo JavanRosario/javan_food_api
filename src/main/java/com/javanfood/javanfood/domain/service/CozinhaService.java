@@ -1,5 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
+import com.javanfood.javanfood.api.dto.request.CozinhaRequest;
+import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaRequestMapper;
 import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradoException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cozinha;
@@ -9,16 +11,30 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class CozinhaService {
 
     private static final String MSG_ENTIDADE_EM_USO = "Cozinha de código: %d não pode ser removida, pois está em uso";
     private final CozinhaRepository cozinhaRepository;
+    private final CozinhaRequestMapper cozinhaRequestMapper;
 
-    public Cozinha buscarOuFalha(Long cozinha_id) {
-        return cozinhaRepository.findById(cozinha_id)
-                .orElseThrow(() -> new CozinhaNaoEncontradoException(cozinha_id));
+    public List<Cozinha> listar() {
+        return cozinhaRepository.findAll();
+    }
+
+    public Cozinha buscarOuFalha(Long cozinhaId) {
+        return cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() -> new CozinhaNaoEncontradoException(cozinhaId));
+    }
+
+    @Transactional
+    public Cozinha atualizar(Long id, CozinhaRequest cozinhaRequest) {
+        Cozinha cozinha = buscarOuFalha(id);
+        cozinhaRequestMapper.updateEntityFromDto(cozinhaRequest, cozinha);
+        return salvar(cozinha);
     }
 
     @Transactional

@@ -3,13 +3,15 @@ package com.javanfood.javanfood.domain.service;
 import com.javanfood.javanfood.api.dto.request.GrupoRequest;
 import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
-import com.javanfood.javanfood.domain.exception.GrupoNãoEncontradoException;
+import com.javanfood.javanfood.domain.exception.GrupoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Grupo;
 import com.javanfood.javanfood.domain.repository.GrupoRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +20,12 @@ public class GrupoService {
     private final GrupoRepository grupoRepository;
     private final GrupoRequestMapper grupoRequestMapper;
 
-    public Grupo buscaOuFalha(Long grupoId) {
-        return grupoRepository.findById(grupoId).orElseThrow(() -> new GrupoNãoEncontradoException(grupoId));
+    public List<Grupo> listar() {
+        return grupoRepository.findAll();
+    }
+
+    public Grupo buscarOuFalha(Long grupoId) {
+        return grupoRepository.findById(grupoId).orElseThrow(() -> new GrupoNaoEncontradoException(grupoId));
     }
 
     @Transactional
@@ -29,15 +35,15 @@ public class GrupoService {
 
     @Transactional
     public Grupo atualizar(Long id, GrupoRequest grupoRequest) {
-        Grupo grupo = buscaOuFalha(id);
+        Grupo grupo = buscarOuFalha(id);
         grupoRequestMapper.updateEntityFromDto(grupoRequest, grupo);
         return salvar(grupo);
     }
 
     @Transactional
-    public void deletar(Long id) {
+    public void excluir(Long id) {
         if (!grupoRepository.existsById(id)) {
-            throw new GrupoNãoEncontradoException(id);
+            throw new GrupoNaoEncontradoException(id);
         }
         try {
             grupoRepository.deleteById(id);

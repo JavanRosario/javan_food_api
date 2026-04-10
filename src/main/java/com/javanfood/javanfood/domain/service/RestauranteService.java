@@ -2,7 +2,10 @@ package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
 import com.javanfood.javanfood.api.mapper.restauranteMapper.RestauranteRequestMapper;
+import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradoException;
+import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradoException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
+import com.javanfood.javanfood.domain.exception.NegocioException;
 import com.javanfood.javanfood.domain.exception.RestauranteNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Cozinha;
@@ -13,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class RestauranteService {
@@ -20,9 +25,13 @@ public class RestauranteService {
     private static final String MSG_ENTIDADE_EM_USO = "Restaurante de código: %d não pode ser removida, pois está em uso";
     private final RestauranteRepository restauranteRepository;
     private final CozinhaService cozinhaService;
-    private final CidadeService cidadeService; // ← ADICIONA
-    private final RestauranteRequestMapper restauranteRequestMapper; // ← ADICIONA
+    private final CidadeService cidadeService;
+    private final RestauranteRequestMapper restauranteRequestMapper;
 
+
+    public List<Restaurante> listar() {
+        return restauranteRepository.findAll();
+    }
 
     public Restaurante buscarOuFalha(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)
@@ -33,23 +42,22 @@ public class RestauranteService {
     public Restaurante atualizar(Long id, RestauranteRequest request) {
         Restaurante restaurante = buscarOuFalha(id);
         restauranteRequestMapper.updateEntityFromDto(request, restaurante);
-        restaurante.getEndereco().setCidade(
-                cidadeService.buscaOuFalha(request.getEndereco().getCidade().getId())
-        );
-        restaurante.setCozinha(cozinhaService.buscarOuFalha(request.getCozinha().getId()));
         return salvar(restaurante);
     }
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
-        Long cozinhaId = restaurante.getCozinha().getId();
-        Long cidadeId = restaurante.getEndereco().getCidade().getId();
-
-        Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
-        Cidade cidade = cidadeService.buscaOuFalha(cidadeId);
-        restaurante.setCozinha(cozinha);
-        restaurante.getEndereco().setCidade(cidade);
-        return restauranteRepository.save(restaurante);
+        try {
+            Long cozinhaId = restaurante.getCozinha().getId();
+            Long cidadeId = restaurante.getEndereco().getCidade().getId();
+            Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
+            Cidade cidade = cidadeService.buscarOuFalha(cidadeId);
+            restaurante.setCozinha(cozinha);
+            restaurante.getEndereco().setCidade(cidade);
+            return restauranteRepository.save(restaurante);
+        } catch (CozinhaNaoEncontradoException | CidadeNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @Transactional

@@ -23,9 +23,9 @@ public class CustomJpaRepositoryImpl<T, ID>
     public Optional<T> buscarPrimeiroNome() {
         var jpql = "from " + getDomainClass().getName();
 
-        T entiry = entityManager.createQuery(jpql, getDomainClass())
+        T entity = entityManager.createQuery(jpql, getDomainClass())
                 .setMaxResults(1).getSingleResult();
 
-        return Optional.ofNullable(entiry);
+        return Optional.ofNullable(entity);
     }
 }

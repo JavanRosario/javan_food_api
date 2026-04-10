@@ -12,16 +12,22 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class CidadeService {
 
     private static final String MSG_CIDADE_EM_USO = "Cidade de código: %d não pode ser removida, pois está em uso";
     private final CidadeRepository cidadeRepository;
-    private final EstadoService cadastroEstado;
+    private final EstadoService estadoService;
     private final CidadeRequestMapper cidadeRequestMapper;
 
-    public Cidade buscaOuFalha(Long cidadeId) {
+    public List<Cidade> listar() {
+        return cidadeRepository.findAll();
+    }
+
+    public Cidade buscarOuFalha(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
                 .orElseThrow(
                         () -> new CidadeNaoEncontradoException(cidadeId));
@@ -29,16 +35,16 @@ public class CidadeService {
 
     @Transactional
     public Cidade atualizar(Long id, CidadeRequest request) {
-        Cidade cidade = buscaOuFalha(id);
+        Cidade cidade = buscarOuFalha(id);
         cidadeRequestMapper.updateEntityFromDto(request, cidade);
-        cidade.setEstado(cadastroEstado.buscaOuFalha(request.getEstado().getId()));
+        cidade.setEstado(estadoService.buscarOuFalha(request.getEstado().getId()));
         return salvar(cidade);
     }
 
     @Transactional
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        Estado estado = cadastroEstado.buscaOuFalha(estadoId);
+        Estado estado = estadoService.buscarOuFalha(estadoId);
         cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
     }

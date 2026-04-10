@@ -8,8 +8,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface EstadoRequestMapper {
-    Estado toDomainObject(EstadoRequest EstadoRequest);
+    Estado toDomainObject(EstadoRequest estadoRequest);
 
     @Mapping(target = "id", ignore = true)
-    void updateEntityFromDTO(EstadoRequest estadoRequest, @MappingTarget Estado estado);
+    void updateEntityFromDto(EstadoRequest estadoRequest, @MappingTarget Estado estado);
 }
