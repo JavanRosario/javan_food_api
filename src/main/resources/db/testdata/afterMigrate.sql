@@ -43,7 +43,7 @@ SET
 FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO usuario (nome, email, senha, data_cadastro)
-values ("javan", "corno@gmail.com", "123", UTC_TIMESTAMP());
+values ('javan', 'corno@gmail.com', '123', UTC_TIMESTAMP());
 INSERT
 INTO estado (nome)
 VALUES ('Rio de Janeiro');
