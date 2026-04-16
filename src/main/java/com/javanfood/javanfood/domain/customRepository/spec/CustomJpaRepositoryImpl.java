@@ -28,4 +28,6 @@ public class CustomJpaRepositoryImpl<T, ID>
 
         return Optional.ofNullable(entity);
     }
+
+
 }

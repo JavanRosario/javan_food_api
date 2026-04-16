@@ -1,15 +1,12 @@
 package com.javanfood.javanfood.domain.service;
 
+import com.javanfood.javanfood.api.dto.request.ProdutoRequest;
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
+import com.javanfood.javanfood.api.mapper.produtoMapper.ProdutoRequestMapper;
 import com.javanfood.javanfood.api.mapper.restauranteMapper.RestauranteRequestMapper;
-import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradoException;
-import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradoException;
-import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
-import com.javanfood.javanfood.domain.exception.NegocioException;
-import com.javanfood.javanfood.domain.exception.RestauranteNaoEncontradoException;
-import com.javanfood.javanfood.domain.model.Cidade;
-import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.model.Restaurante;
+import com.javanfood.javanfood.domain.exception.*;
+import com.javanfood.javanfood.domain.model.*;
+import com.javanfood.javanfood.domain.repository.ProdutoRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -27,6 +24,9 @@ public class RestauranteService {
     private final CozinhaService cozinhaService;
     private final CidadeService cidadeService;
     private final RestauranteRequestMapper restauranteRequestMapper;
+    private final FormaPagamentoService formaPagamentoService;
+    private final ProdutoRepository produtoRepository;
+    private final ProdutoRequestMapper produtoRequestMapper;
 
 
     public List<Restaurante> listar() {
@@ -36,6 +36,39 @@ public class RestauranteService {
     public Restaurante buscarOuFalha(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
+    }
+
+    @Transactional
+    public Produto adicionarProduto(Long restauranteId, Produto produto) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        produto.setRestaurante(restaurante);
+        return produtoRepository.save(produto);
+    }
+
+    @Transactional
+    public Produto atualizarProduto(Long restauranteId, ProdutoRequest produtoRequest, Long produtoId) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        Produto produto = getProdutoId(restauranteId, produtoId, restaurante);
+        produtoRequestMapper.updateEntityFromDto(produtoRequest, produto);
+        return produtoRepository.save(produto);
+    }
+
+    public FormaPagamento getFormaPagamentoId(Long restauranteId, Long formaPagamentoId, Restaurante restaurante) {
+        return restaurante.getFormasPagamento()
+                .stream()
+                .filter(fp -> fp.getId().equals(formaPagamentoId))
+                .findFirst()
+                .orElseThrow(() -> new NegocioException(
+                        String.format("Forma de pagamento %d não encontrada no restaurante %d", formaPagamentoId, restauranteId)
+                ));
+    }
+
+    public Produto getProdutoId(Long restauranteId, Long produtoId, Restaurante restaurante) {
+        return restaurante.getProdutos()
+                .stream()
+                .filter(g -> g.getId().equals(produtoId))
+                .findFirst()
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId));
     }
 
     @Transactional
@@ -73,6 +106,20 @@ public class RestauranteService {
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_ENTIDADE_EM_USO, restauranteId));
         }
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalha(formaPagamentoId);
+        restaurante.getFormasPagamento().remove(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalha(formaPagamentoId);
+        restaurante.getFormasPagamento().add(formaPagamento);
     }
 
     @Transactional
