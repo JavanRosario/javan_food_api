@@ -30,7 +30,7 @@ public class CozinhaController {
     @GetMapping("/{cozinhaId}")
     public CozinhaResponse buscarPorId(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cozinhaService.buscarOuFalha(cozinhaId);
-        return cozinhaResponseMapper.cozinhaDto(cozinha);
+        return cozinhaResponseMapper.toDto(cozinha);
     }
 
     @PostMapping
@@ -38,12 +38,12 @@ public class CozinhaController {
     public CozinhaResponse adicionar(@RequestBody @Valid CozinhaRequest cozinhaRequest) {
         Cozinha cozinha = cozinhaRequestMapper.toDomainObject(cozinhaRequest);
         cozinha = cozinhaService.salvar(cozinha);
-        return cozinhaResponseMapper.cozinhaDto(cozinha);
+        return cozinhaResponseMapper.toDto(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
     public CozinhaResponse atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaRequest cozinhaRequest) {
-        return cozinhaResponseMapper.cozinhaDto(cozinhaService.atualizar(cozinhaId, cozinhaRequest));
+        return cozinhaResponseMapper.toDto(cozinhaService.atualizar(cozinhaId, cozinhaRequest));
     }
 
     @DeleteMapping("/{cozinhaId}")

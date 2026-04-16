@@ -11,7 +11,7 @@ import java.util.List;
 public interface UsuarioResponseMapper {
     UsuarioSemSenhaResponse usuarioSemSenhaDto(Usuario usuario);
 
-    List<UsuarioSemSenhaResponse> usuarioSemSenhatoDtoCollection(List<Usuario> usuarios);
+    List<UsuarioSemSenhaResponse> usuarioSemSenhaToDtoCollection(List<Usuario> usuarios);
 
     UsuarioResponse usuarioComSenhaDto(Usuario usuario);
 

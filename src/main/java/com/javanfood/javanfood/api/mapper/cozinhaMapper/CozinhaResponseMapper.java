@@ -10,7 +10,7 @@ import com.javanfood.javanfood.domain.model.Cozinha;
 @Mapper(componentModel = "spring")
 public interface CozinhaResponseMapper {
 
-	CozinhaResponse cozinhaDto(Cozinha cozinha);
+	CozinhaResponse toDto(Cozinha cozinha);
 
 	List<CozinhaResponse> toDtoCollection(List<Cozinha> cozinha);
 

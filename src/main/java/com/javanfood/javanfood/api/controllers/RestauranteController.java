@@ -47,7 +47,7 @@ public class RestauranteController {
         return restauranteResponseMapper.toDto(restauranteService.atualizar(restauranteId, restauranteRequest));
     }
 
-    @DeleteMapping("{restauranteId}")
+    @DeleteMapping("/{restauranteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long restauranteId) {
         restauranteService.excluir(restauranteId);

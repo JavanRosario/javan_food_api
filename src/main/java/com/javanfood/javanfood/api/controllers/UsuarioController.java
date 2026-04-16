@@ -3,7 +3,6 @@ package com.javanfood.javanfood.api.controllers;
 import com.javanfood.javanfood.api.dto.request.SenhaUsuarioRequest;
 import com.javanfood.javanfood.api.dto.request.UsuarioRequest;
 import com.javanfood.javanfood.api.dto.request.UsuarioSemSenhaRequest;
-import com.javanfood.javanfood.api.dto.response.UsuarioResponse;
 import com.javanfood.javanfood.api.dto.response.UsuarioSemSenhaResponse;
 import com.javanfood.javanfood.api.mapper.usuarioMapper.UsuarioRequestMapper;
 import com.javanfood.javanfood.api.mapper.usuarioMapper.UsuarioResponseMapper;
@@ -27,7 +26,7 @@ public class UsuarioController {
 
     @GetMapping
     public List<UsuarioSemSenhaResponse> listar() {
-        return usuarioResponseMapper.usuarioSemSenhatoDtoCollection(usuarioService.listar());
+        return usuarioResponseMapper.usuarioSemSenhaToDtoCollection(usuarioService.listar());
     }
 
     @GetMapping("/{usuarioId}")
@@ -37,9 +36,9 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioResponse adicionar(@RequestBody @Valid UsuarioRequest usuarioRequest) {
+    public UsuarioSemSenhaResponse adicionar(@RequestBody @Valid UsuarioRequest usuarioRequest) {
         Usuario usuario = usuarioRequestMapper.toDomainObject(usuarioRequest);
-        return usuarioResponseMapper.usuarioComSenhaDto(usuarioService.salvar(usuario));
+        return usuarioResponseMapper.usuarioSemSenhaDto(usuarioService.salvar(usuario));
     }
 
     @PutMapping("/{usuarioId}")
