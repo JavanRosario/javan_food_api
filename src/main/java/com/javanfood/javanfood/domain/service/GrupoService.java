@@ -5,6 +5,7 @@ import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.GrupoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Grupo;
+import com.javanfood.javanfood.domain.model.Permissao;
 import com.javanfood.javanfood.domain.repository.GrupoRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class GrupoService {
     private static final String MSG_ENTIDADE_EM_USO = "Grupo de código: %d não pode ser removida, pois está em uso";
     private final GrupoRepository grupoRepository;
     private final GrupoRequestMapper grupoRequestMapper;
+    private final PermissaoService permissaoService;
 
     public List<Grupo> listar() {
         return grupoRepository.findAll();
@@ -51,5 +53,19 @@ public class GrupoService {
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_ENTIDADE_EM_USO, id));
         }
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalha(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalha(permissaoId);
+        grupo.getPermissoes().add(permissao);
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalha(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalha(permissaoId);
+        grupo.getPermissoes().remove(permissao);
     }
 }

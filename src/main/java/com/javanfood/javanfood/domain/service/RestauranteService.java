@@ -88,7 +88,7 @@ public class RestauranteService {
             restaurante.setCozinha(cozinha);
             restaurante.getEndereco().setCidade(cidade);
             return restauranteRepository.save(restaurante);
-        } catch (CozinhaNaoEncontradoException | CidadeNaoEncontradoException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -132,6 +132,18 @@ public class RestauranteService {
     public void desativar(Long restauranteId) {
         Restaurante restaurante = buscarOuFalha(restauranteId);
         restaurante.desativar();
+    }
+
+    @Transactional
+    public void abrir(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        restaurante.abrir();
+    }
+
+    @Transactional
+    public void fechar(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalha(restauranteId);
+        restaurante.fechar();
     }
 }
 

@@ -2,7 +2,7 @@ package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.CozinhaRequest;
 import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaRequestMapper;
-import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradoException;
+import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradaException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
@@ -27,7 +27,7 @@ public class CozinhaService {
 
     public Cozinha buscarOuFalha(Long cozinhaId) {
         return cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() -> new CozinhaNaoEncontradoException(cozinhaId));
+                .orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
     }
 
     @Transactional
@@ -46,7 +46,7 @@ public class CozinhaService {
     public void excluir(Long cozinhaId) {
 
         if (!cozinhaRepository.existsById(cozinhaId)) {
-            throw new CozinhaNaoEncontradoException(cozinhaId);
+            throw new CozinhaNaoEncontradaException(cozinhaId);
         }
         try {
             cozinhaRepository.deleteById(cozinhaId);

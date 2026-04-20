@@ -9,6 +9,7 @@ public record RestauranteResponse(
         BigDecimal taxaFrete,
         CozinhaResponse cozinha,
         Boolean ativo,
+        Boolean aberto,
         EnderecoResponse endereco
 ) {
 }

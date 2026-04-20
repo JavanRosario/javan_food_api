@@ -2,7 +2,7 @@ package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.CidadeRequest;
 import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeRequestMapper;
-import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradoException;
+import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradaException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.model.Estado;
@@ -30,7 +30,7 @@ public class CidadeService {
     public Cidade buscarOuFalha(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
                 .orElseThrow(
-                        () -> new CidadeNaoEncontradoException(cidadeId));
+                        () -> new CidadeNaoEncontradaException(cidadeId));
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class CidadeService {
     public void excluir(Long cidadeId) {
 
         if (!cidadeRepository.existsById(cidadeId)) {
-            throw new CidadeNaoEncontradoException(cidadeId);
+            throw new CidadeNaoEncontradaException(cidadeId);
         }
 
         try {

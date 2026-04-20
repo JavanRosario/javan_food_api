@@ -144,39 +144,39 @@ VALUES (4, 1),
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('Trattoria Del Nonno', 8.90, 1, 3, 'Jardins', '01308-000', 'Sobrado', 'Rua Augusta', '1420', UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('Nakamura Sushi', 6.50, 2, 3, 'Liberdade', '01501-000', 'Loja 12', 'Rua Galvão Bueno', '540', UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('Fogão de Minas', 4.00, 3, 7, 'Savassi', '30130-170', NULL, 'Rua Pernambuco', '200', UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('La Brasserie', 12.00, 6, 1, 'Ipanema', '22410-003', 'Cobertura', 'Rua Visconde de Pirajá', '330',
-        UTC_TIMESTAMP(), UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('Al Jannat', 7.00, 4, 5, 'Centro', '80020-180', NULL, 'Rua XV de Novembro', '890', UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
-                         ativo)
+                         ativo, aberto)
 VALUES ('El Rancho', 9.50, 5, 8, 'Moinhos de Vento', '90570-020', 'Sala 3', 'Rua Padre Chagas', '150', UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(), true);
+        UTC_TIMESTAMP(), true, true);
 
 INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id)
 VALUES (1, 2),

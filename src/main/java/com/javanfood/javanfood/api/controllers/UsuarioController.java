@@ -42,7 +42,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
-    public UsuarioSemSenhaResponse atualizarSemSenha(@RequestBody @Valid UsuarioSemSenhaRequest usuarioSemSenhaRequest, @PathVariable Long usuarioId) {
+    public UsuarioSemSenhaResponse atualizarSemSenha(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSemSenhaRequest usuarioSemSenhaRequest) {
         return usuarioResponseMapper.usuarioSemSenhaDto(usuarioService.atualizar(usuarioId, usuarioSemSenhaRequest));
     }
 

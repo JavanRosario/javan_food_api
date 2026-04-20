@@ -39,13 +39,13 @@ public class GrupoController {
     }
 
     @PutMapping("/{grupoId}")
-    public GrupoResponse atualizar(@RequestBody @Valid GrupoRequest grupoRequest, @PathVariable Long grupoId) {
+    public GrupoResponse atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoRequest grupoRequest) {
         return grupoResponseMapper.toDto(grupoService.atualizar(grupoId, grupoRequest));
     }
 
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deletar(@PathVariable Long grupoId) {
+    public void deletar(@PathVariable Long grupoId) {
         grupoService.excluir(grupoId);
     }
 
