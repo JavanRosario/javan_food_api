@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.EstadoRequest;
-import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoRequestMapper;
+import com.javanfood.javanfood.api.mapper.estado.EstadoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.EstadoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Estado;
@@ -44,11 +44,7 @@ public class EstadoService {
 
     @Transactional
     public void excluir(Long estadoId) {
-
-        if (!estadoRepository.existsById(estadoId)) {
-            throw new EstadoNaoEncontradoException(estadoId);
-        }
-
+        buscarOuFalha(estadoId);
         try {
             estadoRepository.deleteById(estadoId);
             estadoRepository.flush();

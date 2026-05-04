@@ -3,7 +3,7 @@ package com.javanfood.javanfood.domain.customRepository;
 import com.javanfood.javanfood.domain.customRepository.spec.RestauranteSpecs;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
-import com.javanfood.javanfood.domain.repository.RestauranteRepositoryQueries;
+import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

@@ -3,8 +3,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.request.CozinhaRequest;
 import com.javanfood.javanfood.api.dto.response.CozinhaResponse;
-import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaRequestMapper;
-import com.javanfood.javanfood.api.mapper.cozinhaMapper.CozinhaResponseMapper;
+import com.javanfood.javanfood.api.mapper.cozinha.CozinhaRequestMapper;
+import com.javanfood.javanfood.api.mapper.cozinha.CozinhaResponseMapper;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.service.CozinhaService;
 import jakarta.validation.Valid;

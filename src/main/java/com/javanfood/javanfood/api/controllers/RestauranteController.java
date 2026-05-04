@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
 import com.javanfood.javanfood.api.dto.response.RestauranteResponse;
-import com.javanfood.javanfood.api.mapper.restauranteMapper.RestauranteRequestMapper;
-import com.javanfood.javanfood.api.mapper.restauranteMapper.RestauranteResponseMapper;
+import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
+import com.javanfood.javanfood.api.mapper.restaurante.RestauranteResponseMapper;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.service.RestauranteService;
 import jakarta.validation.Valid;
@@ -75,5 +75,17 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fechar(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        restauranteService.ativarRestaurantes(restaurantesIds);
+    }
+
+    @DeleteMapping("/desativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        restauranteService.inativarRestaurantes(restaurantesIds);
     }
 }

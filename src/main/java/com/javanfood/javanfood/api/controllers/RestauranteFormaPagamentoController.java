@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.response.FormaPagamentoResponse;
-import com.javanfood.javanfood.api.mapper.formaPagamentoMapper.FormaPagamentoResponseMapper;
+import com.javanfood.javanfood.api.mapper.formapagamento.FormaPagamentoResponseMapper;
 import com.javanfood.javanfood.domain.model.FormaPagamento;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.service.RestauranteService;

@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.response.EstadoResponse;
 import com.javanfood.javanfood.api.dto.request.EstadoRequest;
-import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoRequestMapper;
-import com.javanfood.javanfood.api.mapper.estadoMapper.EstadoResponseMapper;
+import com.javanfood.javanfood.api.mapper.estado.EstadoRequestMapper;
+import com.javanfood.javanfood.api.mapper.estado.EstadoResponseMapper;
 import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.domain.service.EstadoService;
 import jakarta.validation.Valid;

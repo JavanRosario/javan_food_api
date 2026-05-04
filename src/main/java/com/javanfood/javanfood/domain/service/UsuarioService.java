@@ -1,9 +1,10 @@
 package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.UsuarioSemSenhaRequest;
-import com.javanfood.javanfood.api.mapper.usuarioMapper.UsuarioRequestMapper;
+import com.javanfood.javanfood.api.mapper.usuario.UsuarioRequestMapper;
 import com.javanfood.javanfood.domain.exception.NegocioException;
 import com.javanfood.javanfood.domain.exception.UsuarioNaoEncontradoException;
+import com.javanfood.javanfood.domain.model.Grupo;
 import com.javanfood.javanfood.domain.model.Usuario;
 import com.javanfood.javanfood.domain.repository.UsuarioRepository;
 import jakarta.persistence.EntityManager;
@@ -17,10 +18,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
+
     private final UsuarioRepository usuarioRepository;
     private final UsuarioRequestMapper usuarioRequestMapper;
     private final EntityManager entityManager;
-
+    private final GrupoService grupoService;
 
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
@@ -59,5 +61,11 @@ public class UsuarioService {
         usuario.setSenha(novaSenha);
         usuarioRepository.save(usuario);
     }
-}
 
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalha(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalha(grupoId);
+        usuario.getGrupos().remove(grupo);
+    }
+}

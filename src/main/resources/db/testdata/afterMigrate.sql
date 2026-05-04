@@ -22,9 +22,15 @@ FROM restaurante;
 DELETE
 FROM restaurante_forma_pagamento;
 DELETE
+FROM restaurante_usuario_responsavel;
+DELETE
 FROM usuario;
 DELETE
 FROM usuario_grupo;
+DELETE
+FROM pedido;
+DELETE
+FROM item_pedido;
 
 ALTER TABLE cidade AUTO_INCREMENT = 1;
 ALTER TABLE cozinha AUTO_INCREMENT = 1;
@@ -38,14 +44,13 @@ ALTER TABLE restaurante AUTO_INCREMENT = 1;
 ALTER TABLE restaurante_forma_pagamento AUTO_INCREMENT = 1;
 ALTER TABLE usuario AUTO_INCREMENT = 1;
 ALTER TABLE usuario_grupo AUTO_INCREMENT = 1;
+ALTER TABLE pedido AUTO_INCREMENT = 1;
+ALTER TABLE item_pedido AUTO_INCREMENT = 1;
 
 SET
 FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO usuario (nome, email, senha, data_cadastro)
-values ('javan', 'corno@gmail.com', '123', UTC_TIMESTAMP());
-INSERT
-INTO estado (nome)
+INSERT INTO estado (nome)
 VALUES ('Rio de Janeiro');
 INSERT INTO estado (nome)
 VALUES ('São Paulo');
@@ -142,6 +147,17 @@ VALUES (4, 1),
        (4, 3),
        (4, 5);
 
+INSERT INTO usuario (nome, email, senha, data_cadastro)
+VALUES ('Javan Oliveira', 'javan@javanfood.com', '123456', UTC_TIMESTAMP());
+INSERT INTO usuario (nome, email, senha, data_cadastro)
+VALUES ('Ana Lima', 'ana@javanfood.com', '123456', UTC_TIMESTAMP());
+
+INSERT INTO usuario_grupo (usuario_id, grupo_id)
+VALUES (1, 1),
+       (1, 2);
+INSERT INTO usuario_grupo (usuario_id, grupo_id)
+VALUES (2, 3);
+
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro, endereco_cep,
                          endereco_complemento, endereco_logradouro, endereco_numero, data_cadastro, data_atualizacao,
                          ativo, aberto)
@@ -198,6 +214,11 @@ VALUES (1, 2),
        (6, 3),
        (6, 4);
 
+INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 2);
+
 INSERT INTO produto (nome, descricao, preco, ativo, restaurante_id)
 VALUES ('Spaghetti alla Carbonara', 'Massa artesanal com guanciale, ovo e pecorino romano', 62.90, 1, 1);
 INSERT INTO produto (nome, descricao, preco, ativo, restaurante_id)
@@ -228,3 +249,17 @@ INSERT INTO produto (nome, descricao, preco, ativo, restaurante_id) VALUES ('Tac
 INSERT INTO produto (nome, descricao, preco, ativo, restaurante_id) VALUES ('Burrito de Frango', 'Wrap recheado com frango,
         arroz, feijão preto e queijo', 38.00, 1, 6);
 INSERT INTO produto (nome, descricao, preco, ativo, restaurante_id) VALUES ('Churros com Doce de Leite', 'Churros crocantes com doce de leite argentino', 26.00, 1, 6);
+
+INSERT INTO pedido (sub_total, taxa_frete, valor_total, status_pedido, data_criacao,
+                    data_confirmacao, data_entrega, data_cancelamento,
+                    endereco_cep, endereco_logradouro, endereco_numero,
+                    endereco_complemento, endereco_bairro, endereco_cidade_id,
+                    forma_pagamento_id, restaurante_id, usuario_cliente_id)
+VALUES (62.90, 8.90, 71.80, 'CRIADO', UTC_TIMESTAMP(),
+        NULL, NULL, NULL,
+        '01308-000', 'Rua Augusta', '1420',
+        'Sobrado', 'Jardins', 1,
+        2, 1, 1);
+
+INSERT INTO item_pedido (quantidade, preco_unitario, preco_total, observacao, produto_id, pedido_id)
+VALUES (1, 62.90, 62.90, 'Sem pimenta', 1, 1);

@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.request.CidadeRequest;
 import com.javanfood.javanfood.api.dto.response.CidadeResponse;
-import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeRequestMapper;
-import com.javanfood.javanfood.api.mapper.cidadeMapper.CidadeResponseMapper;
+import com.javanfood.javanfood.api.mapper.cidade.CidadeRequestMapper;
+import com.javanfood.javanfood.api.mapper.cidade.CidadeResponseMapper;
 import com.javanfood.javanfood.domain.model.Cidade;
 import com.javanfood.javanfood.domain.service.CidadeService;
 import jakarta.validation.Valid;
@@ -50,7 +50,8 @@ public class CidadeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long cidadeId) {
         cidadeService.excluir(cidadeId);
+        
     }
-
-
+    
+   
 }

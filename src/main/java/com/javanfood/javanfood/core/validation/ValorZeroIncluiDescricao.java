@@ -15,7 +15,7 @@ import jakarta.validation.Payload;
 
 public @interface ValorZeroIncluiDescricao {
 
-	String message() default "descrção obrigatoria inválida";
+	String message() default "descrição obrigatória inválida";
 
 	Class<?>[] groups() default {};
 

@@ -2,21 +2,21 @@ package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.ProdutoRequest;
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
-import com.javanfood.javanfood.api.mapper.produtoMapper.ProdutoRequestMapper;
-import com.javanfood.javanfood.api.mapper.restauranteMapper.RestauranteRequestMapper;
+import com.javanfood.javanfood.api.mapper.produto.ProdutoRequestMapper;
+import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
 import com.javanfood.javanfood.domain.exception.*;
 import com.javanfood.javanfood.domain.model.*;
 import com.javanfood.javanfood.domain.repository.ProdutoRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RestauranteService {
 
     private static final String MSG_ENTIDADE_EM_USO = "Restaurante de código: %d não pode ser removida, pois está em uso";
@@ -28,6 +28,23 @@ public class RestauranteService {
     private final ProdutoRepository produtoRepository;
     private final ProdutoRequestMapper produtoRequestMapper;
 
+    @Transactional
+    public void ativarRestaurantes(List<Long> restaurantesIds) {
+        try {
+            restaurantesIds.forEach(this::ativar);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public void inativarRestaurantes(List<Long> restaurantesIds) {
+        try {
+            restaurantesIds.forEach(this::desativar);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAll();
@@ -95,11 +112,7 @@ public class RestauranteService {
 
     @Transactional
     public void excluir(Long restauranteId) {
-
-        if (!restauranteRepository.existsById(restauranteId)) {
-            throw new RestauranteNaoEncontradoException(restauranteId);
-        }
-
+        buscarOuFalha(restauranteId);
         try {
             restauranteRepository.deleteById(restauranteId);
             restauranteRepository.flush();
@@ -146,4 +159,3 @@ public class RestauranteService {
         restaurante.fechar();
     }
 }
-

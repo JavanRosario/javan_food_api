@@ -30,7 +30,6 @@ public class ItemPedido {
 	@Column(nullable = false)
 	private BigDecimal precoTotal;
 
-	@Column(nullable = false)
 	private String observacao;
 
 	@ManyToOne

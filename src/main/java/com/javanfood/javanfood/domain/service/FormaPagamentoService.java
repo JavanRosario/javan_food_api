@@ -1,32 +1,33 @@
 package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.FormaPagamentoRequest;
-import com.javanfood.javanfood.api.mapper.formaPagamentoMapper.FormaPagamentoRequestMapper;
+import com.javanfood.javanfood.api.mapper.formapagamento.FormaPagamentoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
-import com.javanfood.javanfood.domain.exception.PagamentoNaoEncontradoException;
+import com.javanfood.javanfood.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.javanfood.javanfood.domain.model.FormaPagamento;
 import com.javanfood.javanfood.domain.repository.FormaPagamentoRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FormaPagamentoService {
 
+    private static final String MSG_ENTIDADE_EM_USO = "Forma de Pagamento de código: %d não pode ser removida, pois está em uso";
     private final FormaPagamentoRepository formaPagamentoRepository;
     private final FormaPagamentoRequestMapper formaPagamentoRequestMapper;
-    private static final String MSG_ENTIDADE_EM_USO = "Forma de Pagamento de código: %d não pode ser removida, pois está em uso";
 
     public List<FormaPagamento> listar() {
         return formaPagamentoRepository.findAll();
     }
 
     public FormaPagamento buscarOuFalha(Long pagamentoId) {
-        return formaPagamentoRepository.findById(pagamentoId).orElseThrow(() -> new PagamentoNaoEncontradoException(pagamentoId));
+        return formaPagamentoRepository.findById(pagamentoId)
+                .orElseThrow(() -> new FormaPagamentoNaoEncontradaException(pagamentoId));
     }
 
     @Transactional
@@ -43,10 +44,7 @@ public class FormaPagamentoService {
 
     @Transactional
     public void excluir(Long formaPagamentoId) {
-        if (!formaPagamentoRepository.existsById(formaPagamentoId)) {
-            throw new PagamentoNaoEncontradoException(formaPagamentoId);
-        }
-
+        buscarOuFalha(formaPagamentoId);
         try {
             formaPagamentoRepository.deleteById(formaPagamentoId);
             formaPagamentoRepository.flush();

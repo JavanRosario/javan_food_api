@@ -1,22 +1,23 @@
 package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.GrupoRequest;
-import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoRequestMapper;
+import com.javanfood.javanfood.api.mapper.grupo.GrupoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.GrupoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Grupo;
 import com.javanfood.javanfood.domain.model.Permissao;
 import com.javanfood.javanfood.domain.repository.GrupoRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GrupoService {
+
     private static final String MSG_ENTIDADE_EM_USO = "Grupo de código: %d não pode ser removida, pois está em uso";
     private final GrupoRepository grupoRepository;
     private final GrupoRequestMapper grupoRequestMapper;
@@ -44,9 +45,7 @@ public class GrupoService {
 
     @Transactional
     public void excluir(Long id) {
-        if (!grupoRepository.existsById(id)) {
-            throw new GrupoNaoEncontradoException(id);
-        }
+        buscarOuFalha(id);
         try {
             grupoRepository.deleteById(id);
             grupoRepository.flush();

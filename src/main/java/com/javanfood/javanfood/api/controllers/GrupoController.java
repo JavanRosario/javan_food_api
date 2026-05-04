@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.request.GrupoRequest;
 import com.javanfood.javanfood.api.dto.response.GrupoResponse;
-import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoRequestMapper;
-import com.javanfood.javanfood.api.mapper.grupoMapper.GrupoResponseMapper;
+import com.javanfood.javanfood.api.mapper.grupo.GrupoRequestMapper;
+import com.javanfood.javanfood.api.mapper.grupo.GrupoResponseMapper;
 import com.javanfood.javanfood.domain.model.Grupo;
 import com.javanfood.javanfood.domain.service.GrupoService;
 import jakarta.validation.Valid;

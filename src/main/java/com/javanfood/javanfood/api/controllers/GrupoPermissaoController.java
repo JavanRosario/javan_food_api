@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.response.PermissaoResponse;
-import com.javanfood.javanfood.api.mapper.permissaoMapper.PermissaoResponseMapper;
+import com.javanfood.javanfood.api.mapper.permissao.PermissaoResponseMapper;
 import com.javanfood.javanfood.domain.model.Grupo;
 import com.javanfood.javanfood.domain.service.GrupoService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GrupoPermissaoController {
     private final GrupoService grupoService;
-    private final PermissaoResponseMapper grupoResponseMapper;
+    private final PermissaoResponseMapper permissaoResponseMapper;
 
 
     @GetMapping
     public List<PermissaoResponse> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalha(grupoId);
-        return grupoResponseMapper.toDtoCollection(grupo.getPermissoes());
+        return permissaoResponseMapper.toDtoCollection(grupo.getPermissoes());
     }
 
     @PutMapping("/{permissaoId}")

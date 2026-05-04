@@ -2,8 +2,8 @@ package com.javanfood.javanfood.api.controllers;
 
 import com.javanfood.javanfood.api.dto.request.ProdutoRequest;
 import com.javanfood.javanfood.api.dto.response.ProdutoResponse;
-import com.javanfood.javanfood.api.mapper.produtoMapper.ProdutoRequestMapper;
-import com.javanfood.javanfood.api.mapper.produtoMapper.ProdutoResponseMapper;
+import com.javanfood.javanfood.api.mapper.produto.ProdutoRequestMapper;
+import com.javanfood.javanfood.api.mapper.produto.ProdutoResponseMapper;
 import com.javanfood.javanfood.domain.model.Produto;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.service.RestauranteService;
