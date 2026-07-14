@@ -36,7 +36,7 @@ public class RestauranteProdutoController {
 
 	@GetMapping
 	public List<ProdutoResponse> listar(@PathVariable Long restauranteId,
-			@RequestParam(required = false) boolean incluirInativos) {
+			@RequestParam(required = false) boolean incluirInativos)   {
 
 		Restaurante restaurante = restauranteService.buscarOuFalha(restauranteId);
 		if (incluirInativos) {
