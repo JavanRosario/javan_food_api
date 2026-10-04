@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pagamentos")
+@RequestMapping("/api/v1/pagamentos")
 @RequiredArgsConstructor
 public class FormaPagamentoController {
     private final FormaPagamentoResponseMapper formaPagamentoResponseMapper;

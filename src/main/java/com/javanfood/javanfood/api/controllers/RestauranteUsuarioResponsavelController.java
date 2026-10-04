@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("restaurantes/{restauranteId}/usuarios")
+@RequestMapping("/api/v1restaurantes/{restauranteId}/usuarios")
 @RequiredArgsConstructor
 public class RestauranteUsuarioResponsavelController {
     private final RestauranteService restauranteService;
