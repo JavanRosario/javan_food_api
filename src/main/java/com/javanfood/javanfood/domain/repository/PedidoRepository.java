@@ -1,6 +1,7 @@
 package com.javanfood.javanfood.domain.repository;
 
 import com.javanfood.javanfood.domain.model.Pedido;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,13 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     Optional<Pedido> findByCodigo(String codigo);
 
-    @Query("from Pedido p join fetch p.usuario join fetch p.restaurante r join fetch r.cozinha")
+    @EntityGraph(attributePaths = {
+            "usuario",
+            "restaurante",
+            "restaurante.cozinha",
+            "itemPedido",
+            "itemPedido.produto"
+    })
+    @Query("SELECT DISTINCT p FROM Pedido p")
     List<Pedido> findAll();
 }

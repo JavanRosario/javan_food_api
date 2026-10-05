@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/v1grupos/{grupoId}/permissao")
+@RequestMapping("/api/v1/grupos/{grupoId}/permissao")
 @RestController
 @RequiredArgsConstructor
 public class GrupoPermissaoController {

@@ -72,11 +72,11 @@ public class Restaurante {
     private Endereco endereco;
 
     @CreationTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
+    @Column(nullable = false)
     private OffsetDateTime dataCadastro;
 
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
+    @Column(nullable = false)
     private OffsetDateTime dataAtualizacao;
 
     @ManyToMany

@@ -1,2 +1,5 @@
-alter table restaurante add ativo tinyint(1) not null;
+alter table restaurante add column ativo boolean;
+
 update restaurante set ativo = true;
+
+alter table restaurante alter column ativo set not null;

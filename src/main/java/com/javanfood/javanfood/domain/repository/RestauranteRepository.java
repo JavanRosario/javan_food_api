@@ -2,6 +2,7 @@ package com.javanfood.javanfood.domain.repository;
 
 import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
 import com.javanfood.javanfood.domain.model.Restaurante;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor {
     List<Restaurante> findByTaxaFreteBetween(BigDecimal txInicial, BigDecimal txFinal);
-    
+
     @Query("select distinct r from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
-    List<Restaurante>findAllWithCozinhaFormaPagamentoList();
+    List<Restaurante> findAllWithCozinhaFormaPagamentoList();
 
     List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
 
@@ -26,5 +27,11 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     boolean existsByNome(String nome);
 
     int countByCozinhaId(Long cozinhaId);
+
+
+    @EntityGraph(attributePaths = {"cozinha", "endereco.cidade", "endereco.cidade.estado"})
+    @Query("SELECT DISTINCT r FROM Restaurante r")
+    List<Restaurante> findAllCompleto();
+
 
 }
