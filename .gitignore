@@ -1,17 +1,57 @@
-### Java ###
+# ============================================
+# JAVA
+# ============================================
 *.class
 *.log
 *.jar
 *.war
 *.ear
+*.nar
+*.jks
+*.keystore
+*.p12
+*.ser
+*.tmp
+*.bak
+*.swp
+*~
 
-### Build Tools (Maven/Gradle) ###
+# ============================================
+# MAVEN / GRADLE (Build Tools)
+# ============================================
 target/
-build/
-.gradle/
-.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
-### STS / Eclipse ###
+.gradle/
+build/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# ============================================
+# SPRING BOOT
+# ============================================
+application-local.properties
+application-dev.properties
+application-homolog.properties
+application-prod.properties
+application-*.properties
+*.pid
+*.hprof
+spring-boot-devtools.properties
+spring-boot-devtools.yaml
+
+# ============================================
+# ECLIPSE / STS
+# ============================================
 .settings/
 .project
 .classpath
@@ -20,20 +60,159 @@ bin/
 *.launch
 *.tmp
 *.bak
+*.swp
+*~
+.apt_generated/
+.factorypath
+.idea_modules/
+*.iws
+*.ipr
+*.iml
+.externalToolBuilders/
+*.prefs
+*.log
+**/target/
+**/bin/
 
-### IntelliJ IDEA ###
+# ============================================
+# INTELLIJ IDEA
+# ============================================
 .idea/
 *.iml
 *.iws
 out/
+.idea_modules/
+*.ipr
+*.iws
 
-### VS Code ###
+# ============================================
+# VS CODE
+# ============================================
 .vscode/
+*.code-workspace
 
-### Operating System ###
+# ============================================
+# TESTES
+# ============================================
+**/test-output/
+**/surefire-reports/
+**/failsafe-reports/
+*.test
+*.test.html
+**/target/site/
+**/target/generated-sources/
+**/target/generated-test-sources/
+**/target/test-classes/
+**/target/classes/
+**/target/maven-archiver/
+**/target/maven-status/
+**/target/surefire-reports/
+**/target/failsafe-reports/
+**/target/coverage/
+
+# ============================================
+# BANCO DE DADOS
+# ============================================
+*.db
+*.sqlite
+*.h2.db
+*.mv.db
+*.trace.db
+*.lck
+*.log.db
+*.data.db
+*.backup.db
+*.script
+*.properties
+
+# ============================================
+# DOCKER
+# ============================================
+docker-compose.override.yml
+*.Dockerfile
+*.dockerignore
+.docker/
+docker-data/
+*.tar
+*.tar.gz
+
+# ============================================
+# LOGS
+# ============================================
+logs/
+*.log
+*.log.gz
+*.log.zip
+*.log.*
+
+# ============================================
+# SISTEMA OPERACIONAL
+# ============================================
 Thumbs.db
 .DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*.tmp
+*.temp
+*.swp
+*.swo
+*.~*
+*.backup
+*.bak
 
-### Environment Variables ###
+# ============================================
+# VARIÁVEIS DE AMBIENTE / SEGREDOS
+# ============================================
 .env
 .env.local
+.env.*.local
+*.secret
+*.key
+*.pem
+*.crt
+*.csr
+*.der
+*.p8
+*.pkcs12
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.cer
+*.cert
+*.key
+*.pub
+*.id_rsa
+*.id_ed25519
+
+# ============================================
+# PASTAS DE CACHE DO SEU PROJETO
+# ============================================
+.lemminx/
+.codetogether/
+.docker/
+.m2/
+.p2/
+.apt_generated/
+.apt_generated_tests/
+
+# ============================================
+# ARQUIVOS GRANDES (EVITAR SUBIR)
+# ============================================
+*.mp4
+*.mp3
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+*.m4v
+*.webm
+*.m4a
+*.wav
+*.aiff
+*.aac
+*.ogg
