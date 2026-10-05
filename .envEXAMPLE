@@ -1,0 +1,4 @@
+DB_USER=SEUS_DADOS
+DB_PASSWORD=SEUS_DADOS
+hikari_connection=SEUS_DADOS
+flyway_root=SEUS_DADOS

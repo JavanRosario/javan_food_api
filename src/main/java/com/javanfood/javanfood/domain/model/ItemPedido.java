@@ -1,43 +1,37 @@
 package com.javanfood.javanfood.domain.model;
 
-import java.math.BigDecimal;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.math.BigDecimal;
 
 @Entity
 @Data
 @EqualsAndHashCode
 public class ItemPedido {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@EqualsAndHashCode.Include
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    private Long id;
 
-	private Integer quantidade;
+    private Short quantidade;
 
-	@Column(nullable = false)
-	private BigDecimal precoUnitario;
+    @Column(nullable = false)
+    private BigDecimal precoUnitario;
 
-	@Column(nullable = false)
-	private BigDecimal precoTotal;
+    @Column(nullable = false)
+    private BigDecimal precoTotal;
 
-	private String observacao;
+    private String observacao;
 
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Produto produto;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Produto produto;
 
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Pedido pedido;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Pedido pedido;
 
 }

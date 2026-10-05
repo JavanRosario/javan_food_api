@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/formas-pagamento")
+@RequestMapping("/api/v1/restaurantes/{restauranteId}/formas-pagamento")
 @RequiredArgsConstructor
 public class RestauranteFormaPagamentoController {
 
