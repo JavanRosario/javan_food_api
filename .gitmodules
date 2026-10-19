@@ -1,0 +1,3 @@
+[submodule "confirmacao-pedido-ms"]
+	path = confirmacao-pedido-ms
+	url = https://github.com/JavanRosario/confirmacao-pedido-ms.git
