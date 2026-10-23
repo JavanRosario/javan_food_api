@@ -89,10 +89,10 @@ values ('CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
 -- =========================================================
 
 insert into grupo (nome)
-values ('Administrador'),
-       ('Gerente'),
-       ('Atendente'),
-       ('Financeiro');
+values ('ADMIN'),
+       ('GERENTE'),
+       ('ATENDENTE'),
+       ('FINANCEIRO');
 
 
 -- =========================================================
