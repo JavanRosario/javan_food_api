@@ -2,6 +2,8 @@ package com.javanfood.javanfood.domain.service;
 
 import com.javanfood.javanfood.api.dto.request.ProdutoRequest;
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
+import com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse;
+import com.javanfood.javanfood.api.dto.response.RestauranteResumidoResponse;
 import com.javanfood.javanfood.api.mapper.produto.ProdutoRequestMapper;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
 import com.javanfood.javanfood.domain.exception.*;
@@ -48,6 +50,14 @@ public class RestauranteService {
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAllCompleto();
+    }
+
+    public List<RestauranteNomeResponse> listarPorNome() {
+        return restauranteRepository.findAllNome();
+    }
+
+    public List<RestauranteResumidoResponse> listarResumido() {
+        return restauranteRepository.findAllResumido();
     }
 
     public Restaurante buscarOuFalha(Long restauranteId) {

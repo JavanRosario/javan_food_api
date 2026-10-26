@@ -39,11 +39,6 @@ gradlew.bat
 # ============================================
 # SPRING BOOT
 # ============================================
-application-local.properties
-application-dev.properties
-application-homolog.properties
-application-prod.properties
-application-*.properties
 *.pid
 *.hprof
 spring-boot-devtools.properties

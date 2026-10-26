@@ -1,5 +1,7 @@
 package com.javanfood.javanfood.domain.repository;
 
+import com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse;
+import com.javanfood.javanfood.api.dto.response.RestauranteResumidoResponse;
 import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -32,6 +34,12 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     @EntityGraph(attributePaths = {"cozinha", "endereco.cidade", "endereco.cidade.estado"})
     @Query("SELECT DISTINCT r FROM Restaurante r")
     List<Restaurante> findAllCompleto();
+
+    @Query("select new com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse(r.id, r.nome) from Restaurante r")
+    List<RestauranteNomeResponse> findAllNome();
+
+    @Query("select new com.javanfood.javanfood.api.response.RestauranteResumidoResponse(r.id, r.nome, r.taxaFrete, r.cozinha) from Restaurante r")
+    List<RestauranteResumidoResponse> findAllResumido();
 
 
 }
