@@ -1,9 +1,9 @@
 package com.javanfood.javanfood.domain.repository;
 
-import com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse;
-import com.javanfood.javanfood.api.dto.response.RestauranteResumidoResponse;
 import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
 import com.javanfood.javanfood.domain.model.Restaurante;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor {
+
     List<Restaurante> findByTaxaFreteBetween(BigDecimal txInicial, BigDecimal txFinal);
 
     @Query("select distinct r from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
@@ -30,16 +31,18 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 
     int countByCozinhaId(Long cozinhaId);
 
-
     @EntityGraph(attributePaths = {"cozinha", "endereco.cidade", "endereco.cidade.estado"})
-    @Query("SELECT DISTINCT r FROM Restaurante r")
+    @Query("SELECT DISTINCT r FROM Restaurante r order by r.id asc")
     List<Restaurante> findAllCompleto();
 
-    @Query("select new com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse(r.id, r.nome) from Restaurante r")
-    List<RestauranteNomeResponse> findAllNome();
+    @Query("select r.nome as nome, r.id as id from Restaurante r")
+    List<RestauranteNomeProjection> findAllByNome();
 
-    @Query("select new com.javanfood.javanfood.api.response.RestauranteResumidoResponse(r.id, r.nome, r.taxaFrete, r.cozinha) from Restaurante r")
-    List<RestauranteResumidoResponse> findAllResumido();
+    @Query("select r.id as id, r.nome as nome, r.taxaFrete as taxaFrete, c as cozinha " +
+            "from Restaurante r " +
+            "inner join r.cozinha c " +
+            "order by r.id asc")
+    List<RestauranteResumidoProjection> findAllResumido();
 
 
 }

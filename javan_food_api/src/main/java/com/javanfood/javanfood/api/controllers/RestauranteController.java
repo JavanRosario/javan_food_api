@@ -1,15 +1,19 @@
 package com.javanfood.javanfood.api.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
-import com.javanfood.javanfood.api.dto.response.RestauranteNomeResponse;
 import com.javanfood.javanfood.api.dto.response.RestauranteResponse;
-import com.javanfood.javanfood.api.dto.response.RestauranteResumidoResponse;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteResponseMapper;
 import com.javanfood.javanfood.domain.model.Restaurante;
-import com.javanfood.javanfood.domain.model.view.RestauranteView;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import com.javanfood.javanfood.domain.service.RestauranteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,25 +24,56 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/restaurantes")
 @RequiredArgsConstructor
+@Tag(name = "Restaurantes", description = "Endpoints para gerenciamento de restaurantes")
 public class RestauranteController {
+
+    private final String menssagemGet = """
+             {
+                    "id": 1,
+                    "nome": "Trattoria Del Nonno",
+                    "taxaFrete": 8.90,
+                    "cozinha": {
+                        "id": 1,
+                        "nome": "Italiana"
+                    },
+                    "ativo": true,
+                    "aberto": true,
+                    "endereco": {
+                        "cep": "01308-000",
+                        "logradouro": "Rua Augusta",
+                        "numero": "1420",
+                        "complemento": "Sobrado",
+                        "bairro": "Jardins",
+                        "cidade": {
+                            "id": 3,
+                            "nome": "São Paulo",
+                            "estado": "São Paulo"
+                        }
+                    }
+                }
+            """;
 
     private final RestauranteService restauranteService;
     private final RestauranteResponseMapper restauranteResponseMapper;
     private final RestauranteRequestMapper restauranteRequestMapper;
 
     @GetMapping
+    @Operation(summary = "Trás o resultado de restaurantes")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso!" , content = @Content(mediaType = "application/json", examples = @ExampleObject(value = menssagemGet))),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
     public List<RestauranteResponse> listar() {
         return restauranteResponseMapper.toDtoCollection(restauranteService.listar());
     }
 
-    @JsonView(RestauranteView.class)
     @GetMapping(params = "projecao=resumo")
-    public List<RestauranteResumidoResponse> listarResumido() {
+    public List<RestauranteResumidoProjection> listarResumido() {
         return restauranteService.listarResumido();
     }
 
     @GetMapping(params = "projecao=nome")
-    public List<RestauranteNomeResponse> listarNome() {
+    public List<RestauranteNomeProjection> listarNome() {
         return restauranteService.listarPorNome();
     }
 
