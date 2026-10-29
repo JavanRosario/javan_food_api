@@ -33,10 +33,13 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     @Query("SELECT DISTINCT r FROM Restaurante r order by r.id asc")
     List<Restaurante> findAllCompleto();
 
-
+    /**
+     * metodo responsável para atuar em quaisquer projections. desde que seja implementaco corretamente usando JPA
+     * projections
+     *
+     * @author Javan Rosario
+     */
     <T> List<T> findBy(Class<T> order);
-
-
 
 
 }
