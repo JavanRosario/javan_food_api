@@ -14,4 +14,5 @@ public interface RestauranteResumidoProjection {
     BigDecimal getTaxaFrete();
 
     CozinhaProjection getCozinha();
+
 }

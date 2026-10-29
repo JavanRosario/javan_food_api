@@ -2,8 +2,6 @@ package com.javanfood.javanfood.domain.repository;
 
 import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
 import com.javanfood.javanfood.domain.model.Restaurante;
-import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
-import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -35,14 +33,10 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     @Query("SELECT DISTINCT r FROM Restaurante r order by r.id asc")
     List<Restaurante> findAllCompleto();
 
-    @Query("select r.nome as nome, r.id as id from Restaurante r")
-    List<RestauranteNomeProjection> findAllByNome();
 
-    @Query("select r.id as id, r.nome as nome, r.taxaFrete as taxaFrete, c as cozinha " +
-            "from Restaurante r " +
-            "inner join r.cozinha c " +
-            "order by r.id asc")
-    List<RestauranteResumidoProjection> findAllResumido();
+    <T> List<T> findBy(Class<T> order);
+
+
 
 
 }

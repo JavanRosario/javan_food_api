@@ -53,11 +53,11 @@ public class RestauranteService {
     }
 
     public List<RestauranteNomeProjection> listarPorNome() {
-        return restauranteRepository.findAllByNome();
+        return restauranteRepository.findBy(RestauranteNomeProjection.class);
     }
 
     public List<RestauranteResumidoProjection> listarResumido() {
-        return restauranteRepository.findAllResumido();
+        return restauranteRepository.findBy(RestauranteResumidoProjection.class);
     }
 
     public Restaurante buscarOuFalha(Long restauranteId) {

@@ -1,8 +1,5 @@
 package com.javanfood.javanfood.api.controllers;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.javanfood.javanfood.api.dto.request.RestauranteRequest;
 import com.javanfood.javanfood.api.dto.response.RestauranteResponse;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
@@ -11,11 +8,12 @@ import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
 import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import com.javanfood.javanfood.domain.service.RestauranteService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +28,13 @@ public class RestauranteController {
     private final RestauranteRequestMapper restauranteRequestMapper;
 
     @GetMapping
-    public List<RestauranteResponse> listar() {
+    public List<RestauranteResponse> listar(@Parameter
+                                                    (name = "projecao",
+                                                            description = "define o retorno da projecao",
+                                                            in = ParameterIn.QUERY,
+                                                            required = true,
+                                                            schema = @Schema(allowableValues = {"resumo", "nome"}))
+                                            @RequestParam String projecao) {
         return restauranteResponseMapper.toDtoCollection(restauranteService.listar());
     }
 //isso é legado
