@@ -6,9 +6,11 @@ import com.javanfood.javanfood.api.dto.response.PedidoResumoResponse;
 import com.javanfood.javanfood.api.mapper.pedido.PedidoRequestMapper;
 import com.javanfood.javanfood.api.mapper.pedido.PedidoResponseMapper;
 import com.javanfood.javanfood.domain.model.Pedido;
+import com.javanfood.javanfood.domain.repository.projection.PedidoFilter;
 import com.javanfood.javanfood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,8 @@ public class PedidoController {
     private final PedidoRequestMapper pedidoRequestMapper;
 
     @GetMapping
-    public List<PedidoResumoResponse> listar() {
-        return pedidoResponseMapper.toDtoCollection(pedidoService.listar());
+    public List<PedidoResumoResponse> listar(@ParameterObject PedidoFilter pedidoFilter) {
+        return pedidoResponseMapper.toDtoCollection(pedidoService.listar(pedidoFilter));
     }
 
 //    @GetMapping

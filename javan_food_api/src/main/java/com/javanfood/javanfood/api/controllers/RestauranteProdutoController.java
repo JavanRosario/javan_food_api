@@ -26,9 +26,10 @@ public class RestauranteProdutoController {
 
     @GetMapping
     public List<ProdutoResponse> listar(@PathVariable Long restauranteId,
-                                        @RequestParam(required = false) boolean incluirInativos) {
+                                        @RequestParam(required = false, defaultValue = "false", name = "true") boolean incluirInativos) {
 
         Restaurante restaurante = restauranteService.buscarOuFalha(restauranteId);
+
         if (incluirInativos) {
             return produtoResponseMapper.toDtoCollection(restaurante.getProdutos());
         }

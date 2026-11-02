@@ -1355,3 +1355,327 @@ values (1, 62.90, 62.90, 'Sem pimenta', 1, 1),
        (1, 44.90, 44.90, 'Sem pimenta', 13, 16),
        (1, 62.90, 62.90, 'Sem cebola', 1, 17),
        (1, 38.00, 38.00, 'Sem feijão', 17, 18);
+
+
+-- =========================================================
+-- DADOS EXTRAS PARA TESTES DE VOLUME
+-- Adiciona restaurantes, produtos e usuários sem depender
+-- de IDs fixos para os novos restaurantes.
+-- =========================================================
+
+-- USUÁRIOS EXTRAS
+insert into usuario (nome, email, senha, data_cadastro)
+values
+    ('Carlos Mendes', 'carlos@javanfood.com', '123456', current_timestamp),
+    ('Mariana Costa', 'mariana@javanfood.com', '123456', current_timestamp),
+    ('Rafael Souza', 'rafael@javanfood.com', '123456', current_timestamp),
+    ('Beatriz Santos', 'beatriz@javanfood.com', '123456', current_timestamp),
+    ('Lucas Ferreira', 'lucas@javanfood.com', '123456', current_timestamp),
+    ('Camila Oliveira', 'camila@javanfood.com', '123456', current_timestamp),
+    ('Pedro Almeida', 'pedro@javanfood.com', '123456', current_timestamp),
+    ('Juliana Ribeiro', 'juliana@javanfood.com', '123456', current_timestamp),
+    ('Thiago Martins', 'thiago@javanfood.com', '123456', current_timestamp),
+    ('Fernanda Lima', 'fernanda@javanfood.com', '123456', current_timestamp);
+
+-- ASSOCIANDO OS NOVOS USUÁRIOS A GRUPOS
+-- Os IDs 3 a 12 são gerados após os dois usuários iniciais,
+-- pois a migration reinicia a identity no início.
+insert into usuario_grupo (usuario_id, grupo_id)
+values
+    (3, 2), (4, 3), (5, 3), (6, 4), (7, 2),
+    (8, 3), (9, 4), (10, 2), (11, 3), (12, 3);
+
+-- RESTAURANTES EXTRAS
+with novos_restaurantes (
+                         nome, taxa_frete, cozinha_id, cidade_id, bairro, cep,
+                         complemento, logradouro, numero, ativo, aberto
+    ) as (
+    values
+        ('Cantinho da Nonna', 7.50, 1, 1, 'Tijuca', '20511-000', null, 'Rua Conde de Bonfim', '720', true, true),
+        ('Sakura Oriental', 9.90, 2, 3, 'Liberdade', '01504-000', 'Loja 5', 'Rua da Glória', '250', true, true),
+        ('Sabor do Sertão', 6.00, 3, 9, 'Asa Norte', '70750-000', null, 'CLN 208', '120', true, true),
+        ('Bistrô das Montanhas', 11.50, 6, 7, 'Funcionários', '30140-000', null, 'Rua dos Aimorés', '650', true, true),
+        ('Pita House', 5.90, 4, 1, 'Copacabana', '22050-000', null, 'Rua Santa Clara', '180', true, true),
+        ('Taco de Ouro', 8.00, 5, 3, 'Pinheiros', '05422-010', null, 'Rua dos Pinheiros', '410', true, true),
+        ('Pasta Fresca', 7.00, 1, 5, 'Batel', '80420-100', null, 'Rua Comendador Araújo', '300', true, true),
+        ('Tempero da Praça', 4.50, 3, 2, 'Icaraí', '24230-000', null, 'Rua Ator Paulo Gustavo', '90', true, true),
+        ('Nori & Cia', 10.00, 2, 8, 'Moinhos de Vento', '90540-000', null, 'Rua 24 de Outubro', '550', true, true),
+        ('La Petite Cuisine', 13.00, 6, 3, 'Moema', '04080-000', null, 'Av. Moema', '700', true, true),
+        ('Chapa Quente', 5.00, 1, 1, 'Méier', '20725-000', null, 'Rua Dias da Cruz', '410', true, false),
+        ('Brasa & Lenha', 12.00, 3, 9, 'Asa Sul', '70200-000', null, 'CLS 205', '30', true, true),
+        ('Empório Vegano', 8.50, 3, 3, 'Vila Madalena', '05435-000', null, 'Rua Harmonia', '220', true, true),
+        ('Cozinha Caiçara', 14.00, 3, 3, 'Santos', '11060-000', null, 'Rua Goiás', '100', true, true),
+        ('Doce Estação', 4.00, 3, 7, 'Centro', '30110-000', null, 'Rua da Bahia', '500', true, true)
+)
+insert into restaurante (
+    nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_bairro,
+    endereco_cep, endereco_complemento, endereco_logradouro, endereco_numero,
+    data_cadastro, data_atualizacao, ativo, aberto
+)
+select
+    nome, taxa_frete, cozinha_id, cidade_id, bairro, cep,
+    complemento, logradouro, numero,
+    current_timestamp, current_timestamp, ativo, aberto
+from novos_restaurantes;
+
+-- PRODUTOS EXTRAS
+-- Cria 6 produtos variados para cada restaurante existente.
+-- O CROSS JOIN gera um volume maior de dados para paginação,
+-- filtros, busca por nome, associação e testes de produtos ativos/inativos.
+insert into produto (nome, descricao, preco, ativo, restaurante_id)
+select
+    case gs.produto_numero
+        when 1 then 'Prato da Casa'
+        when 2 then 'Combo Especial'
+        when 3 then 'Porcao Tradicional'
+        when 4 then 'Especialidade do Chef'
+        when 5 then 'Menu Executivo'
+        else 'Sobremesa da Casa'
+        end || ' ' || lpad(r.id::text, 2, '0'),
+    case gs.produto_numero
+        when 1 then 'Preparado com ingredientes selecionados e temperos da casa.'
+        when 2 then 'Combinação especial preparada diariamente pela equipe.'
+        when 3 then 'Porção generosa, ideal para compartilhar.'
+        when 4 then 'Receita exclusiva do chef com ingredientes frescos.'
+        when 5 then 'Refeição completa acompanhada de guarnições.'
+        else 'Sobremesa artesanal preparada diariamente.'
+        end,
+    (12.90 + (r.id * 1.37) + (gs.produto_numero * 4.25))::numeric(10,2),
+    case
+        when gs.produto_numero = 3 and r.id % 4 = 0 then false
+        when gs.produto_numero = 5 and r.id % 7 = 0 then false
+        else true
+        end,
+    r.id
+from restaurante r
+         cross join generate_series(1, 6) as gs(produto_numero);
+
+-- MAIS FORMAS DE PAGAMENTO PARA OS RESTAURANTES EXTRAS
+-- O bloco usa os restaurantes inseridos por nome para não fixar IDs.
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id)
+select r.id, fp.id
+from restaurante r
+         cross join forma_pagamento fp
+where r.nome in (
+                 'Cantinho da Nonna', 'Sakura Oriental', 'Sabor do Sertão',
+                 'Bistrô das Montanhas', 'Pita House', 'Taco de Ouro',
+                 'Pasta Fresca', 'Tempero da Praça', 'Nori & Cia',
+                 'La Petite Cuisine', 'Chapa Quente', 'Brasa & Lenha',
+                 'Empório Vegano', 'Cozinha Caiçara', 'Doce Estação'
+    )
+  and fp.id in (2, 3, 4);
+
+-- RESPONSÁVEIS PARA OS RESTAURANTES EXTRAS
+insert into restaurante_usuario_responsavel (restaurante_id, usuario_id)
+select r.id, u.id
+from restaurante r
+         join usuario u on u.email = case
+                                         when r.nome in ('Cantinho da Nonna', 'Pasta Fresca', 'La Petite Cuisine') then 'carlos@javanfood.com'
+                                         when r.nome in ('Sakura Oriental', 'Nori & Cia') then 'mariana@javanfood.com'
+                                         when r.nome in ('Sabor do Sertão', 'Brasa & Lenha') then 'rafael@javanfood.com'
+                                         when r.nome in ('Bistrô das Montanhas', 'Doce Estação') then 'beatriz@javanfood.com'
+                                         when r.nome in ('Pita House', 'Taco de Ouro') then 'lucas@javanfood.com'
+                                         when r.nome in ('Tempero da Praça', 'Chapa Quente') then 'camila@javanfood.com'
+                                         else 'pedro@javanfood.com'
+    end
+where r.nome in (
+                 'Cantinho da Nonna', 'Sakura Oriental', 'Sabor do Sertão',
+                 'Bistrô das Montanhas', 'Pita House', 'Taco de Ouro',
+                 'Pasta Fresca', 'Tempero da Praça', 'Nori & Cia',
+                 'La Petite Cuisine', 'Chapa Quente', 'Brasa & Lenha',
+                 'Empório Vegano', 'Cozinha Caiçara', 'Doce Estação'
+    );
+
+
+-- =========================================================
+-- FORMAS DE PAGAMENTO PARA TODOS OS RESTAURANTES
+-- Garante que cada restaurante tenha opções válidas para os
+-- pedidos de demonstração, sem duplicar associações existentes.
+-- =========================================================
+
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id)
+select r.id, fp.id
+from restaurante r
+         cross join forma_pagamento fp
+where not exists (
+    select 1
+    from restaurante_forma_pagamento rfp
+    where rfp.restaurante_id = r.id
+      and rfp.forma_pagamento_id = fp.id
+);
+
+
+-- =========================================================
+-- PEDIDOS EXTRAS
+-- Gera 4 pedidos por restaurante:
+-- 1 CRIADO, 1 CONFIRMADO, 1 ENTREGUE e 1 CANCELADO.
+-- Os pedidos ficam distribuídos entre os 12 usuários e as
+-- formas de pagamento disponíveis para cada restaurante.
+-- =========================================================
+
+with pedidos_base as (
+    select
+        r.id as restaurante_id,
+        r.taxa_frete,
+        r.endereco_cep,
+        r.endereco_logradouro,
+        r.endereco_numero,
+        r.endereco_complemento,
+        r.endereco_bairro,
+        r.endereco_cidade_id,
+        gs.numero_pedido,
+        ((r.id + gs.numero_pedido - 1) % 12) + 1 as usuario_cliente_id,
+    ((r.id + gs.numero_pedido - 1) % 5) + 1 as forma_pagamento_id,
+    case gs.numero_pedido
+    when 1 then 'CRIADO'
+    when 2 then 'CONFIRMADO'
+    when 3 then 'ENTREGUE'
+    else 'CANCELADO'
+end as status_pedido,
+        current_timestamp
+            - (((r.id * 3 + gs.numero_pedido * 7) % 75) * interval '1 day')
+            as data_criacao
+    from restaurante r
+    cross join generate_series(1, 4) as gs(numero_pedido)
+),
+itens_calculados as (
+    select
+        pb.restaurante_id,
+        pb.numero_pedido,
+        pr.preco,
+        ((pb.numero_pedido + gi.numero_item) % 3) + 1 as quantidade
+    from pedidos_base pb
+    cross join generate_series(1, 3) as gi(numero_item)
+    join lateral (
+        select p.preco
+        from produto p
+        where p.restaurante_id = pb.restaurante_id
+        order by p.id
+        offset (
+            (pb.numero_pedido + gi.numero_item - 2)
+            % (select count(*) from produto px where px.restaurante_id = pb.restaurante_id)
+        )
+        limit 1
+    ) pr on true
+),
+totais_pedido as (
+    select
+        restaurante_id,
+        numero_pedido,
+        sum(preco * quantidade)::numeric(10,2) as sub_total
+    from itens_calculados
+    group by restaurante_id, numero_pedido
+)
+insert into pedido (
+    codigo,
+    sub_total,
+    taxa_frete,
+    valor_total,
+    status_pedido,
+    data_criacao,
+    data_confirmacao,
+    data_entrega,
+    data_cancelamento,
+    endereco_cep,
+    endereco_logradouro,
+    endereco_numero,
+    endereco_complemento,
+    endereco_bairro,
+    endereco_cidade_id,
+    forma_pagamento_id,
+    restaurante_id,
+    usuario_cliente_id
+)
+select
+    'DEMO-' || pb.restaurante_id || '-' || pb.numero_pedido,
+    tp.sub_total,
+    pb.taxa_frete,
+    (tp.sub_total + pb.taxa_frete)::numeric(10,2),
+    pb.status_pedido,
+    pb.data_criacao,
+    case
+        when pb.status_pedido in ('CONFIRMADO', 'ENTREGUE', 'CANCELADO')
+            then pb.data_criacao + interval '5 minutes'
+    else null
+end,
+    case
+        when pb.status_pedido = 'ENTREGUE'
+            then pb.data_criacao + interval '50 minutes'
+        else null
+end,
+    case
+        when pb.status_pedido = 'CANCELADO'
+            then pb.data_criacao + interval '15 minutes'
+        else null
+end,
+    pb.endereco_cep,
+    pb.endereco_logradouro,
+    pb.endereco_numero,
+    pb.endereco_complemento,
+    pb.endereco_bairro,
+    pb.endereco_cidade_id,
+    pb.forma_pagamento_id,
+    pb.restaurante_id,
+    pb.usuario_cliente_id
+from pedidos_base pb
+join totais_pedido tp
+  on tp.restaurante_id = pb.restaurante_id
+ and tp.numero_pedido = pb.numero_pedido;
+
+
+-- =========================================================
+-- ITENS DOS PEDIDOS EXTRAS
+-- Cada pedido recebe 3 itens associados a produtos do
+-- próprio restaurante. Os preços e quantidades são os
+-- mesmos usados no cálculo do subtotal acima.
+-- =========================================================
+
+with pedidos_demo as (
+    select
+        p.id as pedido_id,
+        p.restaurante_id,
+        split_part(p.codigo, '-', 3)::integer as numero_pedido
+    from pedido p
+    where p.codigo like 'DEMO-%'
+),
+     itens_calculados as (
+         select
+             pd.pedido_id,
+             pr.id as produto_id,
+             ((pd.numero_pedido + gi.numero_item) % 3) + 1 as quantidade,
+    pr.preco,
+    gi.numero_item
+from pedidos_demo pd
+    cross join generate_series(1, 3) as gi(numero_item)
+    join lateral (
+    select p.id, p.preco
+    from produto p
+    where p.restaurante_id = pd.restaurante_id
+    order by p.id
+    offset (
+    (pd.numero_pedido + gi.numero_item - 2)
+    % (select count(*) from produto px where px.restaurante_id = pd.restaurante_id)
+    )
+    limit 1
+    ) pr on true
+    )
+insert into item_pedido (
+    quantidade,
+    preco_unitario,
+    preco_total,
+    observacao,
+    produto_id,
+    pedido_id
+)
+select
+    ic.quantidade,
+    ic.preco,
+    (ic.preco * ic.quantidade)::numeric(10,2),
+    case ic.numero_item
+        when 1 then 'Item de demonstração - preparo padrão'
+        when 2 then 'Item de demonstração - conferir embalagem'
+        else 'Item de demonstração - acompanhar pedido'
+        end,
+    ic.produto_id,
+    ic.pedido_id
+from itens_calculados ic;

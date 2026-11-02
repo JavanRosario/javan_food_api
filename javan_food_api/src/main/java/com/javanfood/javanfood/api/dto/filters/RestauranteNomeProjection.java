@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.domain.repository.projection;
+package com.javanfood.javanfood.api.dto.filters;
 
 public interface RestauranteNomeProjection {
 
