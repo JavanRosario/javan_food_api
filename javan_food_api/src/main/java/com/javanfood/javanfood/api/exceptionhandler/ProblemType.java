@@ -4,17 +4,38 @@ import lombok.Getter;
 
 @Getter
 public enum ProblemType {
-    RECURSO_NAO_ENCONTRADO("Recurso não encontrado", "/Recurso-nao-encontrado"),
-    ENTIDADE_EM_USO("Entidade em uso", "/entidade-em-uso"),
-    ERRO_NEGOCIO("Violação de regra de negócio", "/erro-negocio"),
-    CORPO_INCOMPREENSIVEL("Corpo da menssagem incompreensivel", "/corpo-incompreensivel"),
-    PARAMETRO_INVALIDO("Parâmetro inválido", "/parametro-invalido"),
-    ERRO_NO_SISTEMA("Erro no sistema", "/erro-no-sistema"),
-    DADOS_INVALIDOS("Dados invalidos", "/dados-invalidos");
+
+    RECURSO_NAO_ENCONTRADO(
+            "Recurso não encontrado",
+            "/errors/resource-not-found"
+    ),
+    ENTIDADE_EM_USO(
+            "Entidade em uso",
+            "/errors/entity-in-use"
+    ),
+    ERRO_NEGOCIO(
+            "Violação de regra de negócio",
+            "/errors/business-error"
+    ),
+    CORPO_INCOMPREENSIVEL(
+            "Corpo da requisição incompreensível",
+            "/errors/unreadable-message"
+    ),
+    PARAMETRO_INVALIDO(
+            "Parâmetro inválido",
+            "/errors/invalid-parameter"
+    ),
+    ERRO_NO_SISTEMA(
+            "Erro interno no sistema",
+            "/errors/internal-server-error"
+    ),
+    DADOS_INVALIDOS(
+            "Dados inválidos",
+            "/errors/invalid-data"
+    );
 
     private final String title;
     private final String uri;
-
 
     ProblemType(String title, String path) {
         this.uri = "https://javanfood.com.br" + path;

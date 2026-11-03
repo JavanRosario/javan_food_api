@@ -3,6 +3,7 @@ package com.javanfood.javanfood.api.exceptionhandler;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import com.javanfood.javanfood.api.dto.errors.FieldViolation;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.EntidadeNaoEncontradaException;
 import com.javanfood.javanfood.domain.exception.NegocioException;
@@ -26,7 +27,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.URI;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +40,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String MSG_ERRO_GENERICA = "Ocorreu um erro interno inesperado no sistema. "
             + "Tente novamente e se o problema persistir, entre em contato"
             + " com o administrador do sistema";
+
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(
@@ -147,7 +148,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleException(RuntimeException e, WebRequest webRequest) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -253,9 +253,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problemDetail, headers, status, request);
     }
 
-
-    public record InvalidField(String name, String userMessage) {}
-
     private ResponseEntity<Object> handleValidationInternal(
             Exception ex,
             BindingResult bindingResult,
@@ -264,19 +261,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
-        String requestUri = ((ServletWebRequest) request).getRequest().getRequestURI();
 
-        List<InvalidField> invalidFields = bindingResult.getAllErrors().stream()
+        String detail = "Um ou mais campos da requisição possuem valores inválidos.";
+
+        String requestUri = ((ServletWebRequest) request)
+                .getRequest()
+                .getRequestURI();
+
+        List<FieldViolation> violations = bindingResult.getAllErrors().stream()
                 .map(objectError -> {
-                    String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
-                    String name = objectError.getObjectName();
 
-                    if (objectError instanceof FieldError) {
-                        name = ((FieldError) objectError).getField();
+                    String message = messageSource.getMessage(
+                            objectError,
+                            LocaleContextHolder.getLocale()
+                    );
+
+                    String field = objectError.getObjectName();
+
+                    if (objectError instanceof FieldError fieldError) {
+                        field = fieldError.getField();
                     }
 
-                    return new InvalidField(name, message);
+                    return new FieldViolation(field, message);
                 })
                 .collect(Collectors.toList());
 
@@ -288,7 +294,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         problemDetail.setProperty("code", problemType.getCode());
         problemDetail.setProperty("timestamp", Instant.now());
-        problemDetail.setProperty("objects", invalidFields);
+        problemDetail.setProperty("violations", violations);
 
         return handleExceptionInternal(ex, problemDetail, headers, status, request);
     }
@@ -354,8 +360,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problemDetail, headers, status, request);
     }
-
-
 
 
 }
