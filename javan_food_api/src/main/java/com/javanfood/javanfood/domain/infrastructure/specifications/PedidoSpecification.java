@@ -1,38 +1,105 @@
 package com.javanfood.javanfood.domain.infrastructure.specifications;
 
+import com.javanfood.javanfood.api.dto.filters.PedidoFilter;
 import com.javanfood.javanfood.domain.model.Pedido;
-import com.javanfood.javanfood.domain.repository.projection.PedidoFilter;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 
-public class PedidoSpecification {
-    public static Specification<Pedido> pedidoSpecification(PedidoFilter pedidoFilter) {
-        return ((root, query, criteriaBuilder) -> {
-            var predicate = new ArrayList<Predicate>();
+public final class PedidoSpecification {
+    private PedidoSpecification() {
+    }
 
+    public static Specification<Pedido> specification(PedidoFilter pedidoFilter) {
+        return (root, query, criteriaBuilder) -> {
+
+            Specification<Pedido> filtros = Specification.where(doCliente(pedidoFilter.clienteId()))
+                    .and(doRestaurante(pedidoFilter.restauranteId()))
+                    .and(doDataDeCriacao(pedidoFilter.dataCriacaoInicio()))
+                    .and(doDataDeCriacaoFim(pedidoFilter.dataCriacaoFim()).and(consultas()));
+
+            return filtros.toPredicate(root, query, criteriaBuilder);
+        };
+    }
+
+    public static Specification<Pedido> consultas() {
+        return (root, query, criteriaBuilder) -> {
             root.fetch("restaurante").fetch("cozinha");
             root.fetch("usuario");
             root.fetch("itemPedido").fetch("produto");
+            root.fetch("endereco").fetch("cidade").fetch("estado");
+            root.fetch("restaurante");
 
-            if (pedidoFilter.clienteId() != null) {
-                predicate.add(criteriaBuilder.equal(root.get("usuario").get("id"), pedidoFilter.clienteId()));
+            return null;
+        };
+    }
+
+
+    public static Specification<Pedido> doCliente(Long clienteId) {
+        return (root, query, criteriaBuilder) -> {
+            if (clienteId == null) {
+                return null;
             }
+            return criteriaBuilder.equal(root.get("usuario").get("id"), clienteId);
+        };
+    }
 
-            if (pedidoFilter.restauranteId() != null) {
-                predicate.add(criteriaBuilder.equal(root.get("restaurante").get("id"), pedidoFilter.restauranteId()));
+    public static Specification<Pedido> doRestaurante(Long restauranteId) {
+        return (root, query, criteriaBuilder) -> {
+            if (restauranteId == null) {
+                return null;
             }
+            return criteriaBuilder.equal(root.get("restaurante").get("id"), restauranteId);
+        };
+    }
 
-            if (pedidoFilter.dataCriacaoInicio() != null) {
-                predicate.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataCriacao"), pedidoFilter.dataCriacaoInicio()));
+    public static Specification<Pedido> doDataDeCriacao(OffsetDateTime dataInicio) {
+        return (root, query, criteriaBuilder) -> {
+            if (dataInicio == null) {
+                return null;
             }
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("dataCriacao"), dataInicio);
+        };
 
-            if (pedidoFilter.dataCriacaoFim() != null) {
-                predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataCriacao"), pedidoFilter.dataCriacaoFim()));
+    }
+
+    public static Specification<Pedido> doDataDeCriacaoFim(OffsetDateTime dataFim) {
+        return (root, query, criteriaBuilder) -> {
+            if (dataFim == null) {
+                return null;
             }
+            return criteriaBuilder.lessThanOrEqualTo(root.get("dataCriacao"), dataFim);
+        };
 
-            return criteriaBuilder.and(predicate.toArray(new Predicate[0]));
-        });
     }
 }
+
+//        private PedidoSpecification (){}
+//        return ((root, query, criteriaBuilder) -> {
+//            var predicate = new ArrayList<Predicate>();
+//
+//            root.fetch("restaurante").fetch("cozinha");
+//            root.fetch("usuario");
+//            root.fetch("itemPedido").fetch("produto");
+//
+//            if (pedidoFilter.clienteId() != null) {
+//                predicate.add(criteriaBuilder.equal(root.get("usuario").get("id"), pedidoFilter.clienteId()));
+//            }
+//
+//            if (pedidoFilter.restauranteId() != null) {
+//                predicate.add(criteriaBuilder.equal(root.get("restaurante").get("id"), pedidoFilter.restauranteId()));
+//            }
+//
+//            if (pedidoFilter.dataCriacaoInicio() != null) {
+//                predicate.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataCriacao"), pedidoFilter.dataCriacaoInicio()));
+//            }
+//
+//            if (pedidoFilter.dataCriacaoFim() != null) {
+//                predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataCriacao"), pedidoFilter.dataCriacaoFim()));
+//            }
+//
+//            return Specification.where(porCozinhaId(pedidoFilter));
+//        });
+
+
+

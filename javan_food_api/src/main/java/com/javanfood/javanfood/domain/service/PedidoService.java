@@ -5,7 +5,7 @@ import com.javanfood.javanfood.domain.exception.PedidoNaoEncontradoException;
 import com.javanfood.javanfood.domain.infrastructure.specifications.PedidoSpecification;
 import com.javanfood.javanfood.domain.model.*;
 import com.javanfood.javanfood.domain.repository.PedidoRepository;
-import com.javanfood.javanfood.domain.repository.projection.PedidoFilter;
+import com.javanfood.javanfood.api.dto.filters.PedidoFilter;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class PedidoService {
     private final CidadeService cidadeService;
 
     public List<Pedido> listar(PedidoFilter pedidoFilter) {
-        return pedidoRepository.findAll(PedidoSpecification.pedidoSpecification(pedidoFilter));
+        return pedidoRepository.findAll(PedidoSpecification.specification(pedidoFilter));
     }
 
     public Pedido salvar(Pedido pedido) {

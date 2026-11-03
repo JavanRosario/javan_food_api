@@ -8,7 +8,7 @@ import com.javanfood.javanfood.domain.exception.*;
 import com.javanfood.javanfood.domain.model.*;
 import com.javanfood.javanfood.domain.repository.ProdutoRepository;
 import com.javanfood.javanfood.domain.repository.RestauranteRepository;
-import com.javanfood.javanfood.api.dto.filters.RestauranteNomeProjection;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
 import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

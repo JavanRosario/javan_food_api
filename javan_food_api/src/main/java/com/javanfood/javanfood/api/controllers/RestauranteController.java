@@ -5,7 +5,7 @@ import com.javanfood.javanfood.api.dto.response.RestauranteResponse;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteRequestMapper;
 import com.javanfood.javanfood.api.mapper.restaurante.RestauranteResponseMapper;
 import com.javanfood.javanfood.domain.model.Restaurante;
-import com.javanfood.javanfood.api.dto.filters.RestauranteNomeProjection;
+import com.javanfood.javanfood.domain.repository.projection.RestauranteNomeProjection;
 import com.javanfood.javanfood.domain.repository.projection.RestauranteResumidoProjection;
 import com.javanfood.javanfood.domain.service.RestauranteService;
 import io.swagger.v3.oas.annotations.Parameter;

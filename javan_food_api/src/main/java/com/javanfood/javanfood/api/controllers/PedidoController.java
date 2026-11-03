@@ -6,7 +6,7 @@ import com.javanfood.javanfood.api.dto.response.PedidoResumoResponse;
 import com.javanfood.javanfood.api.mapper.pedido.PedidoRequestMapper;
 import com.javanfood.javanfood.api.mapper.pedido.PedidoResponseMapper;
 import com.javanfood.javanfood.domain.model.Pedido;
-import com.javanfood.javanfood.domain.repository.projection.PedidoFilter;
+import com.javanfood.javanfood.api.dto.filters.PedidoFilter;
 import com.javanfood.javanfood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
