@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://sourceforge.net"
+              xmlns:xsi="http://w3.org"
+              xsi:schemaLocation="http://sourceforge.net http://sourceforge.net"
+              name="rel_Sigsocial_teste_vazio"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="545"
+              leftMargin="25"
+              rightMargin="25"
+              topMargin="25"
+              bottomMargin="20"
+              isFloatColumnFooter="true"
+              uuid="7a6c9d2f-1e3f-4a5b-9c7d-0f1e2a3b4c5d">
+
+    <parameter name="parRodapeOndas" class="java.lang.String" isForPrompting="false"/>
+
+    <title>
+        <band height="100" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="20" width="545" height="32" uuid="0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Carlito" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[MARINHA DO BRASIL]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="55" width="545" height="24" uuid="937ba165-55e1-4097-8d4a-73762f91cab1"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Carlito" size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TESTE - RELATORIO ]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <detail>
+        <band height="50" splitType="Stretch"/>
+    </detail>
+
+    <pageFooter>
+        <band height="70">
+            <image scaleImage="FillFrame">
+                <reportElement positionType="Float" stretchType="ContainerBottom" mode="Transparent" x="0" y="5" width="545" height="60" uuid="bf049417-626e-4b60-9fdd-4559f6f2c66b"/>
+                <imageExpression><![CDATA[$P{parRodapeOndas}]]></imageExpression>
+            </image>
+        </band>
+    </pageFooter>
+
+</jasperReport>
