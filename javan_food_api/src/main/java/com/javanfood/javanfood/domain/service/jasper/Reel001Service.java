@@ -12,7 +12,7 @@ public class Reel001Service {
 
     public byte[] gerarPdfVazio() {
         try {
-            InputStream stream = this.getClass().getResourceAsStream("/reports/rel_teste.jrxml");
+            InputStream stream = this.getClass().getResourceAsStream("/reports/rel_SigSocial_teste.jrxml");
 
             if (stream == null) {
                 throw new RuntimeException("Arquivo .jrxml nao encontrado!");
@@ -24,7 +24,7 @@ public class Reel001Service {
 
             ClassPathResource logoOndas = new ClassPathResource("reports/waves.png");
             if (logoOndas.exists()) {
-                parametros.put("parRodapeOndas", logoOndas.getURL().getPath());
+                parametros.put("parRodapeOndas", logoOndas.getInputStream());
             }
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());
@@ -32,7 +32,7 @@ public class Reel001Service {
             return JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar o relatorio local", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
