@@ -21,8 +21,11 @@ public class Reel001Service {
             JasperReport jasperReport = JasperCompileManager.compileReport(stream);
 
             Map<String, Object> parametros = new HashMap<>();
+
             ClassPathResource logoOndas = new ClassPathResource("reports/waves.png");
-            parametros.put("parRodapeOndas", logoOndas.getPath());
+            if (logoOndas.exists()) {
+                parametros.put("parRodapeOndas", logoOndas.getURL().getPath());
+            }
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());
 

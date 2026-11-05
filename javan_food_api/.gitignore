@@ -1,216 +1,109 @@
 # ============================================
-# JAVA
+# COMPILAÇÃO E BUILD (JAVA / MAVEN / GRADLE)
 # ============================================
 *.class
-*.log
 *.jar
 *.war
 *.ear
 *.nar
-*.jks
-*.keystore
-*.p12
-*.ser
-*.tmp
-*.bak
-*.swp
-*~
-
-# ============================================
-# MAVEN / GRADLE (Build Tools)
-# ============================================
 target/
+**/target/
+build/
+**/build/
+.gradle/
+bin/
+**/bin/
+
+# Maven Wrapper & Logs
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+release.properties
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-.idea
-.settings
-.gitattributes
 
-.gradle/
-build/
+# Gradle Wrapper
 gradle-wrapper.jar
-gradlew
-gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
 
 # ============================================
-# SPRING BOOT
+# ARQUIVOS DE AMBIENTE, SEGREDOS E BANCO
 # ============================================
-*.pid
-*.hprof
-spring-boot-devtools.properties
-spring-boot-devtools.yaml
-
-# ============================================
-# ECLIPSE / STS
-# ============================================
-.settings/
-.project
-.classpath
-bin/
-.metadata/
-*.launch
-*.tmp
-*.bak
-*.swp
-*~
-.apt_generated/
-.factorypath
-.idea_modules/
-*.iws
-*.ipr
-*.iml
-.externalToolBuilders/
-*.prefs
-*.log
-**/target/
-**/bin/
-
-# ============================================
-# INTELLIJ IDEA
-# ============================================
-.idea/
-*.iml
-*.iws
-out/
-.idea_modules/
-*.ipr
-*.iws
-
-# ============================================
-# VS CODE
-# ============================================
-.vscode/
-*.code-workspace
-
-# ============================================
-# TESTES
-# ============================================
-**/test-output/
-**/surefire-reports/
-**/failsafe-reports/
-*.test
-*.test.html
-**/target/site/
-**/target/generated-sources/
-**/target/generated-test-sources/
-**/target/test-classes/
-**/target/classes/
-**/target/maven-archiver/
-**/target/maven-status/
-**/target/surefire-reports/
-**/target/failsafe-reports/
-**/target/coverage/
-
-# ============================================
-# BANCO DE DADOS
-# ============================================
-*.db
-*.sqlite
-*.h2.db
-*.mv.db
-*.trace.db
-*.lck
-*.log.db
-*.data.db
-*.backup.db
-*.script
-*.properties
-
-# ============================================
-# DOCKER
-# ============================================
-docker-compose.override.yml
-*.Dockerfile
-*.dockerignore
-.docker/
-docker-data/
-*.tar
-*.tar.gz
-
-# ============================================
-# LOGS
-# ============================================
-logs/
-*.log
-*.log.gz
-*.log.zip
-*.log.*
-
-# ============================================
-# SISTEMA OPERACIONAL
-# ============================================
-Thumbs.db
-.DS_Store
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-*.tmp
-*.temp
-*.swp
-*.swo
-*.~*
-*.backup
-*.bak
-
-# ============================================
-# VARIÁVEIS DE AMBIENTE / SEGREDOS
-# ============================================
+# Bloqueia variáveis de ambiente locais com credenciais
 .env
 .env.local
 .env.*.local
 *.secret
 *.key
 *.pem
-*.crt
-*.csr
-*.der
-*.p8
-*.pkcs12
 *.p12
 *.pfx
 *.jks
 *.keystore
-*.truststore
-*.cer
-*.cert
-*.key
-*.pub
-*.id_rsa
-*.id_ed25519
+
+# Banco de dados embarcado local ou dumps
+*.db
+*.sqlite
+*.h2.db
+*.mv.db
+*.trace.db
 
 # ============================================
-# PASTAS DE CACHE DO SEU PROJETO
+# IDEs & EDITORES DE CÓDIGO
 # ============================================
-.lemminx/
-.codetogether/
-.docker/
-.m2/
-.p2/
-.apt_generated/
-.apt_generated_tests/
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse / STS
+.settings/
+.project
+.classpath
+.factorypath
+.metadata/
+*.launch
+
+# VS Code
+.vscode/
+*.code-workspace
 
 # ============================================
-# ARQUIVOS GRANDES (EVITAR SUBIR)
+# LOGS E DUMP DA JVM
 # ============================================
-*.mp4
-*.mp3
-*.avi
-*.mov
-*.wmv
-*.flv
-*.mkv
-*.m4v
-*.webm
-*.m4a
-*.wav
-*.aiff
-*.aac
-*.ogg
+logs/
+*.log
+*.log.*
+*.pid
+*.hprof
+hs_err_pid*
+
+# ============================================
+# DOCKER & SISTEMA OPERACIONAL
+# ============================================
+# Ignora dados persitidos do Docker local e overrides
+docker-data/
+docker-compose.override.yml
+
+# OS Junk
+Thumbs.db
+.DS_Store
+*.tmp
+*.temp
+*.swp
+*~
+
+# ============================================
+# REGRAS DE EXCEÇÃO (NÃO BLOQUEAR)
+# ============================================
+# Garante que arquivos essenciais do repositório subam
+!.gitattributes
+!.gitignore
+!mvnw
+!mvnw.cmd
+!gradlew
+!gradlew.bat

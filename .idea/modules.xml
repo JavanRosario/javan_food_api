@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/javan_food_api.iml" filepath="$PROJECT_DIR$/.idea/javan_food_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javan_food_api/javanfood.iml" filepath="$PROJECT_DIR$/javan_food_api/javanfood.iml" />
     </modules>
   </component>
 </project>
