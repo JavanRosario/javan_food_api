@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.dto.request.EstadoRequest;
-import com.javanfood.javanfood.api.mapper.estado.EstadoRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.EstadoRequest;
+import com.javanfood.javanfood.api.v1.mapper.estado.EstadoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.EstadoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Estado;

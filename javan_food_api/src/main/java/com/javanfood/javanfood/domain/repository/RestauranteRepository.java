@@ -1,6 +1,6 @@
 package com.javanfood.javanfood.domain.repository;
 
-import com.javanfood.javanfood.domain.customRepository.RestauranteRepositoryQueries;
+import com.javanfood.javanfood.domain.repository.RestauranteRepositoryQueries;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

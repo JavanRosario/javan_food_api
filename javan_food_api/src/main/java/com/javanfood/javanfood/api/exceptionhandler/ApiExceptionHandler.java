@@ -3,11 +3,8 @@ package com.javanfood.javanfood.api.exceptionhandler;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
-import com.javanfood.javanfood.api.dto.errors.FieldViolation;
-import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
-import com.javanfood.javanfood.domain.exception.EntidadeNaoEncontradaException;
-import com.javanfood.javanfood.domain.exception.NegocioException;
-import com.javanfood.javanfood.domain.exception.ValidacaoException;
+import com.javanfood.javanfood.api.v1.dto.errors.FieldViolation;
+import com.javanfood.javanfood.domain.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
@@ -40,6 +37,39 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String MSG_ERRO_GENERICA = "Ocorreu um erro interno inesperado no sistema. "
             + "Tente novamente e se o problema persistir, entre em contato"
             + " com o administrador do sistema";
+
+
+    @ExceptionHandler(OrdenacaoInvalidaException.class)
+    public ResponseEntity<?> handleOrdenacaoInvalidaException(
+            OrdenacaoInvalidaException e,
+            WebRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
+
+        String requestUri = ((ServletWebRequest) request)
+                .getRequest()
+                .getRequestURI();
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                status,
+                e.getMessage()
+        );
+
+        problemDetail.setTitle(problemType.getTitle());
+        problemDetail.setType(URI.create(problemType.getUri()));
+        problemDetail.setInstance(URI.create(requestUri));
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("code", problemType.getCode());
+
+        return handleExceptionInternal(
+                e,
+                problemDetail,
+                new HttpHeaders(),
+                status,
+                request
+        );
+    }
 
 
     @Override

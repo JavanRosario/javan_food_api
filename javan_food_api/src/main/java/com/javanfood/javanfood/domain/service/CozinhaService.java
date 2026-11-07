@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.dto.request.CozinhaRequest;
-import com.javanfood.javanfood.api.mapper.cozinha.CozinhaRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.CozinhaRequest;
+import com.javanfood.javanfood.api.v1.mapper.cozinha.CozinhaRequestMapper;
 import com.javanfood.javanfood.domain.exception.CozinhaNaoEncontradaException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cozinha;
@@ -9,6 +9,8 @@ import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class CozinhaService {
     private final CozinhaRepository cozinhaRepository;
     private final CozinhaRequestMapper cozinhaRequestMapper;
 
-    public List<Cozinha> listar() {
-        return cozinhaRepository.findAll();
+    public Page<Cozinha> listar(Pageable pageable) {
+        return cozinhaRepository.findAll(pageable);
     }
 
     public Cozinha buscarOuFalha(Long cozinhaId) {

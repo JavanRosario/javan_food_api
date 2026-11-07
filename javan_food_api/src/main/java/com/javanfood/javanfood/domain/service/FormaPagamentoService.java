@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.dto.request.FormaPagamentoRequest;
-import com.javanfood.javanfood.api.mapper.formapagamento.FormaPagamentoRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.FormaPagamentoRequest;
+import com.javanfood.javanfood.api.v1.mapper.formapagamento.FormaPagamentoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.javanfood.javanfood.domain.model.FormaPagamento;

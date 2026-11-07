@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.dto.request.GrupoRequest;
-import com.javanfood.javanfood.api.mapper.grupo.GrupoRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.GrupoRequest;
+import com.javanfood.javanfood.api.v1.mapper.grupo.GrupoRequestMapper;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.exception.GrupoNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Grupo;
