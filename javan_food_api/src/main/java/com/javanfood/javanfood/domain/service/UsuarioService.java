@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.domain.service;
 
-import com.javanfood.javanfood.api.dto.request.UsuarioSemSenhaRequest;
-import com.javanfood.javanfood.api.mapper.usuario.UsuarioRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.UsuarioSemSenhaRequest;
+import com.javanfood.javanfood.api.v1.mapper.usuario.UsuarioRequestMapper;
 import com.javanfood.javanfood.domain.exception.NegocioException;
 import com.javanfood.javanfood.domain.exception.UsuarioNaoEncontradoException;
 import com.javanfood.javanfood.domain.model.Grupo;

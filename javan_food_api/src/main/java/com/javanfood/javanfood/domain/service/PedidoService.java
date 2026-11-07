@@ -1,18 +1,21 @@
 package com.javanfood.javanfood.domain.service;
 
+import com.javanfood.javanfood.api.v1.dto.filters.PedidoFilter;
+import com.javanfood.javanfood.core.data.PageableTranslator;
 import com.javanfood.javanfood.domain.exception.NegocioException;
 import com.javanfood.javanfood.domain.exception.PedidoNaoEncontradoException;
-import com.javanfood.javanfood.domain.infrastructure.specifications.PedidoSpecification;
+import com.javanfood.javanfood.infrastructure.repository.spec.PedidoSpecification;
 import com.javanfood.javanfood.domain.model.*;
 import com.javanfood.javanfood.domain.repository.PedidoRepository;
-import com.javanfood.javanfood.api.dto.filters.PedidoFilter;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +28,20 @@ public class PedidoService {
     private final ProdutoService produtoService;
     private final CidadeService cidadeService;
 
-    public List<Pedido> listar(PedidoFilter pedidoFilter) {
-        return pedidoRepository.findAll(PedidoSpecification.specification(pedidoFilter));
+    public Page<Pedido> listar(PedidoFilter pedidoFilter, Pageable pageable) {
+
+        return pedidoRepository.findAll(PedidoSpecification.specification(pedidoFilter), converterPage(pageable));
+    }
+
+    private Pageable converterPage(Pageable pageable) {
+        var mapeamento = Map.ofEntries(
+                Map.entry("nomeCliente", "usuario.nome"),
+                Map.entry("codigo", "codigo"),
+                Map.entry("restaurante.nome", "restaurante.nome"),
+                Map.entry("valorTotal", "valorTotal")
+        );
+
+        return PageableTranslator.translate(pageable, mapeamento);
     }
 
     public Pedido salvar(Pedido pedido) {

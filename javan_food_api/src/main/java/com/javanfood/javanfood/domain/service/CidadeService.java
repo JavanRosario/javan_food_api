@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.javanfood.javanfood.api.dto.request.CidadeRequest;
-import com.javanfood.javanfood.api.mapper.cidade.CidadeRequestMapper;
+import com.javanfood.javanfood.api.v1.dto.request.CidadeRequest;
+import com.javanfood.javanfood.api.v1.mapper.cidade.CidadeRequestMapper;
 import com.javanfood.javanfood.domain.exception.CidadeNaoEncontradaException;
 import com.javanfood.javanfood.domain.exception.EntidadeEmUsoException;
 import com.javanfood.javanfood.domain.model.Cidade;
