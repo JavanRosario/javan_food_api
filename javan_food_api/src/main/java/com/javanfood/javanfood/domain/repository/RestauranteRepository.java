@@ -1,10 +1,12 @@
 package com.javanfood.javanfood.domain.repository;
 
-import com.javanfood.javanfood.domain.repository.RestauranteRepositoryQueries;
+import com.javanfood.javanfood.api.v1.dto.response.VendaDiariaResponse;
 import com.javanfood.javanfood.domain.model.Restaurante;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -12,34 +14,49 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor {
+public interface RestauranteRepository
+    extends CustomJpaRepository<Restaurante, Long>,
+        RestauranteRepositoryQueries,
+        JpaSpecificationExecutor {
 
-    List<Restaurante> findByTaxaFreteBetween(BigDecimal txInicial, BigDecimal txFinal);
+  List<Restaurante> findByTaxaFreteBetween(BigDecimal txInicial, BigDecimal txFinal);
 
-    @Query("select distinct r from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
-    List<Restaurante> findAllWithCozinhaFormaPagamentoList();
+  @Query(
+      "select distinct r from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
+  List<Restaurante> findAllWithCozinhaFormaPagamentoList();
 
-    List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
+  List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
 
-    Optional<Restaurante> findFirstByNomeContaining(String nome);
+  Optional<Restaurante> findFirstByNomeContaining(String nome);
 
-    List<Restaurante> findTop2ByNomeContaining(String nome);
+  List<Restaurante> findTop2ByNomeContaining(String nome);
 
-    boolean existsByNome(String nome);
+  boolean existsByNome(String nome);
 
-    int countByCozinhaId(Long cozinhaId);
+  int countByCozinhaId(Long cozinhaId);
 
-    @EntityGraph(attributePaths = {"cozinha", "endereco.cidade", "endereco.cidade.estado"})
-    @Query("SELECT DISTINCT r FROM Restaurante r order by r.id asc")
-    List<Restaurante> findAllCompleto();
+  @EntityGraph(attributePaths = {"cozinha", "endereco.cidade", "endereco.cidade.estado"})
+  @Query("SELECT DISTINCT r FROM Restaurante r order by r.id asc")
+  List<Restaurante> findAllCompleto();
 
-    /**
-     * metodo responsável para atuar em quaisquer projections. desde que seja implementaco corretamente usando JPA
-     * projections
-     *
-     * @author Javan Rosario
-     */
-    <T> List<T> findBy(Class<T> order);
+  /**
+   * metodo responsável para atuar em quaisquer projections. desde que seja implementaco
+   * corretamente usando JPA projections
+   *
+   * @author Javan Rosario
+   */
+  <T> List<T> findBy(Class<T> order);
 
-
+  @Query(
+"""
+    SELECT new com.javanfood.javanfood.api.v1.dto.response.VendaDiariaResponse(
+        CAST(p.dataCriacao AS localdate),
+        COUNT(p.id),
+        SUM(p.valorTotal)
+    )
+    FROM Pedido p
+    WHERE (:restauranteId IS NULL OR p.restaurante.id = :restauranteId)
+    GROUP BY CAST(p.dataCriacao AS localdate)
+""")
+  List<VendaDiariaResponse> consultarVendasDiarias(@Param("restauranteId") Long restauranteId);
 }

@@ -1,5 +1,7 @@
 package com.javanfood.javanfood.domain.repository;
 
+import com.javanfood.javanfood.api.v1.dto.filters.VendaDiariaFilter;
+import com.javanfood.javanfood.api.v1.dto.response.VendaDiariaResponse;
 import com.javanfood.javanfood.domain.model.Pedido;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,4 +29,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecif
     })
     @Query("SELECT DISTINCT p FROM Pedido p")
     Page<Pedido> findAll(Specification specification, Pageable pageable);
+
+
 }

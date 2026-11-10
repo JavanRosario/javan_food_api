@@ -20,44 +20,46 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/pedidos")
 @RequiredArgsConstructor
 public class PedidoController {
-    private final PedidoResponseMapper pedidoResponseMapper;
-    private final PedidoService pedidoService;
-    private final PedidoRequestMapper pedidoRequestMapper;
+  private final PedidoResponseMapper pedidoResponseMapper;
+  private final PedidoService pedidoService;
+  private final PedidoRequestMapper pedidoRequestMapper;
 
-    @GetMapping
-    public Page<PedidoResumoResponse> listar(@ParameterObject PedidoFilter pedidoFilter, @ParameterObject Pageable pageable) {
-        return pedidoService.listar(pedidoFilter, pageable).map(pedidoResponseMapper::pedido);
-    }
+  @GetMapping
+  public Page<PedidoResumoResponse> listar(
+      @ParameterObject PedidoFilter pedidoFilter, @ParameterObject Pageable pageable) {
+    return pedidoService.listar(pedidoFilter, pageable).map(pedidoResponseMapper::pedido);
+  }
 
-//    @GetMapping
-//    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
-//        List<Pedido> pedidos = pedidoService.listar();
-//        List<PedidoResumoResponse> todosPedidos = pedidoResponseMapper.toDtoCollection(pedidos);
-//
-//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(todosPedidos);
-//
-//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-//        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-//
-//        if (StringUtils.isNotBlank(campos)) {
-//            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
-//        }
-//
-//
-//        pedidosWrapper.setFilters(filterProvider);
-//
-//        return pedidosWrapper;
-//    }
+  //    @GetMapping
+  //    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
+  //        List<Pedido> pedidos = pedidoService.listar();
+  //        List<PedidoResumoResponse> todosPedidos = pedidoResponseMapper.toDtoCollection(pedidos);
+  //
+  //        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(todosPedidos);
+  //
+  //        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+  //        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+  //
+  //        if (StringUtils.isNotBlank(campos)) {
+  //            filterProvider.addFilter("pedidoFilter",
+  // SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+  //        }
+  //
+  //
+  //        pedidosWrapper.setFilters(filterProvider);
+  //
+  //        return pedidosWrapper;
+  //    }
 
-    @GetMapping("/{codigoPedido}")
-    public PedidoResponse buscarPorId(@PathVariable String codigoPedido) {
-        return pedidoResponseMapper.toDto(pedidoService.buscarOuFalha(codigoPedido));
-    }
+  @GetMapping("/{codigoPedido}")
+  public PedidoResponse buscarPorId(@PathVariable String codigoPedido) {
+    return pedidoResponseMapper.toDto(pedidoService.buscarOuFalha(codigoPedido));
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PedidoResponse inserirPedido(@Valid @RequestBody PedidoRequest pedidoRequest) {
-        Pedido pedido = pedidoRequestMapper.toObjectModel(pedidoRequest);
-        return pedidoResponseMapper.toDto(pedidoService.adicionarPedido(pedido));
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public PedidoResponse inserirPedido(@Valid @RequestBody PedidoRequest pedidoRequest) {
+    Pedido pedido = pedidoRequestMapper.toObjectModel(pedidoRequest);
+    return pedidoResponseMapper.toDto(pedidoService.adicionarPedido(pedido));
+  }
 }

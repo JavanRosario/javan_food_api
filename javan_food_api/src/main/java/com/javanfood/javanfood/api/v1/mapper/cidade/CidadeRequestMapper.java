@@ -9,9 +9,9 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface CidadeRequestMapper {
 
-    Cidade toDomainObject(CidadeRequest cidadeRequest);
+  Cidade toDomainObject(CidadeRequest cidadeRequest);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "estado", ignore = true)
-    void updateEntityFromDto(CidadeRequest cidadeRequest, @MappingTarget Cidade cidade);
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "estado", ignore = true)
+  void updateEntityFromDto(CidadeRequest cidadeRequest, @MappingTarget Cidade cidade);
 }

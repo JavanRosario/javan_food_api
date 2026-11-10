@@ -23,104 +23,109 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestauranteController {
 
-    private final RestauranteService restauranteService;
-    private final RestauranteResponseMapper restauranteResponseMapper;
-    private final RestauranteRequestMapper restauranteRequestMapper;
+  private final RestauranteService restauranteService;
+  private final RestauranteResponseMapper restauranteResponseMapper;
+  private final RestauranteRequestMapper restauranteRequestMapper;
 
-    @GetMapping
-    public List<RestauranteResponse> listar(@Parameter
-                                                    (name = "projecao",
-                                                            description = "define o retorno da projecao",
-                                                            in = ParameterIn.QUERY,
-                                                            required = true,
-                                                            schema = @Schema(allowableValues = {"resumo", "nome", "---"}))
-                                            @RequestParam String projecao) {
-        return restauranteResponseMapper.toDtoCollection(restauranteService.listar());
-    }
-//isso é legado
-//    @GetMapping("/restaurante-dinamico")
-//    public MappingJacksonValue listarDinamico(@ParameterObject @RequestParam String campos) {
-//        List<Restaurante> restaurantes = restauranteService.listar();
-//        List<RestauranteResponse> restauranteResponses = restauranteResponseMapper.toDtoCollection(restaurantes);
-//
-//        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(restauranteResponses);
-//
-//        FilterProvider filterProvider = new SimpleFilterProvider()
-//                .addFilter("restauranteFilter", SimpleBeanPropertyFilter.serializeAll());
-//
-//        mappingJacksonValue.setFilters(filterProvider);
-//
-//        return mappingJacksonValue;
-//    }
+  @GetMapping
+  public List<RestauranteResponse> listar(
+      @Parameter(
+              name = "projecao",
+              description = "define o retorno da projecao",
+              in = ParameterIn.QUERY,
+              required = true,
+              schema = @Schema(allowableValues = {"resumo", "nome", "---"}))
+          @RequestParam
+          String projecao) {
+    return restauranteResponseMapper.toDtoCollection(restauranteService.listar());
+  }
 
-    @GetMapping(params = "projecao=resumo")
-    public List<RestauranteResumidoProjection> listarResumido() {
-        return restauranteService.listarResumido();
-    }
+  // isso é legado
+  //    @GetMapping("/restaurante-dinamico")
+  //    public MappingJacksonValue listarDinamico(@ParameterObject @RequestParam String campos) {
+  //        List<Restaurante> restaurantes = restauranteService.listar();
+  //        List<RestauranteResponse> restauranteResponses =
+  // restauranteResponseMapper.toDtoCollection(restaurantes);
+  //
+  //        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(restauranteResponses);
+  //
+  //        FilterProvider filterProvider = new SimpleFilterProvider()
+  //                .addFilter("restauranteFilter", SimpleBeanPropertyFilter.serializeAll());
+  //
+  //        mappingJacksonValue.setFilters(filterProvider);
+  //
+  //        return mappingJacksonValue;
+  //    }
 
-    @GetMapping(params = "projecao=nome")
-    public List<RestauranteNomeProjection> listarNome() {
-        return restauranteService.listarPorNome();
-    }
+  @GetMapping(params = "projecao=resumo")
+  public List<RestauranteResumidoProjection> listarResumido() {
+    return restauranteService.listarResumido();
+  }
 
-    @GetMapping("/{restauranteId}")
-    public RestauranteResponse buscarPorId(@PathVariable Long restauranteId) {
-        Restaurante restaurante = restauranteService.buscarOuFalha(restauranteId);
-        return restauranteResponseMapper.toDto(restaurante);
-    }
+  @GetMapping(params = "projecao=nome")
+  public List<RestauranteNomeProjection> listarNome() {
+    return restauranteService.listarPorNome();
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteResponse adicionar(@RequestBody @Valid RestauranteRequest restauranteRequest) {
-        Restaurante restaurante = restauranteRequestMapper.toDomainObject(restauranteRequest);
-        return restauranteResponseMapper.toDto(restauranteService.salvar(restaurante));
-    }
+  @GetMapping("/{restauranteId}")
+  public RestauranteResponse buscarPorId(@PathVariable Long restauranteId) {
+    Restaurante restaurante = restauranteService.buscarOuFalha(restauranteId);
+    return restauranteResponseMapper.toDto(restaurante);
+  }
 
-    @PutMapping("/{restauranteId}")
-    public RestauranteResponse atualizar(@PathVariable Long restauranteId,
-                                         @RequestBody @Valid RestauranteRequest restauranteRequest) {
-        return restauranteResponseMapper.toDto(restauranteService.atualizar(restauranteId, restauranteRequest));
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public RestauranteResponse adicionar(@RequestBody @Valid RestauranteRequest restauranteRequest) {
+    Restaurante restaurante = restauranteRequestMapper.toDomainObject(restauranteRequest);
+    return restauranteResponseMapper.toDto(restauranteService.salvar(restaurante));
+  }
 
-    @DeleteMapping("/{restauranteId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable Long restauranteId) {
-        restauranteService.excluir(restauranteId);
-    }
+  @PutMapping("/{restauranteId}")
+  public RestauranteResponse atualizar(
+      @PathVariable Long restauranteId, @RequestBody @Valid RestauranteRequest restauranteRequest) {
+    return restauranteResponseMapper.toDto(
+        restauranteService.atualizar(restauranteId, restauranteRequest));
+  }
 
-    @PutMapping("/{restauranteId}/ativo")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativar(@PathVariable Long restauranteId) {
-        restauranteService.ativar(restauranteId);
-    }
+  @DeleteMapping("/{restauranteId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deletar(@PathVariable Long restauranteId) {
+    restauranteService.excluir(restauranteId);
+  }
 
-    @DeleteMapping("/{restauranteId}/ativo")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desativar(@PathVariable Long restauranteId) {
-        restauranteService.desativar(restauranteId);
-    }
+  @PutMapping("/{restauranteId}/ativo")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void ativar(@PathVariable Long restauranteId) {
+    restauranteService.ativar(restauranteId);
+  }
 
-    @PutMapping("/{restauranteId}/abrir")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abrir(@PathVariable Long restauranteId) {
-        restauranteService.abrir(restauranteId);
-    }
+  @DeleteMapping("/{restauranteId}/ativo")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void desativar(@PathVariable Long restauranteId) {
+    restauranteService.desativar(restauranteId);
+  }
 
-    @PutMapping("/{restauranteId}/fechar")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fechar(@PathVariable Long restauranteId) {
-        restauranteService.fechar(restauranteId);
-    }
+  @PutMapping("/{restauranteId}/abrir")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void abrir(@PathVariable Long restauranteId) {
+    restauranteService.abrir(restauranteId);
+  }
 
-    @PutMapping("/ativacoes")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
-        restauranteService.ativarRestaurantes(restaurantesIds);
-    }
+  @PutMapping("/{restauranteId}/fechar")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void fechar(@PathVariable Long restauranteId) {
+    restauranteService.fechar(restauranteId);
+  }
 
-    @DeleteMapping("/desativacoes")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desativarMultiplos(@RequestBody List<Long> restaurantesIds) {
-        restauranteService.inativarRestaurantes(restaurantesIds);
-    }
+  @PutMapping("/ativacoes")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    restauranteService.ativarRestaurantes(restaurantesIds);
+  }
+
+  @DeleteMapping("/desativacoes")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void desativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    restauranteService.inativarRestaurantes(restaurantesIds);
+  }
 }

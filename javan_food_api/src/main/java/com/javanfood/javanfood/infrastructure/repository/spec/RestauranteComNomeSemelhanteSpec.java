@@ -11,12 +11,11 @@ import org.springframework.data.jpa.domain.Specification;
 @AllArgsConstructor
 public class RestauranteComNomeSemelhanteSpec implements Specification<Restaurante> {
 
+  private String nome;
 
-    private String nome;
-
-
-    @Override
-    public Predicate toPredicate(Root<Restaurante> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.like(root.get("nome"), "%" + nome + "%");
-    }
+  @Override
+  public Predicate toPredicate(
+      Root<Restaurante> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    return criteriaBuilder.like(root.get("nome"), "%" + nome + "%");
+  }
 }
